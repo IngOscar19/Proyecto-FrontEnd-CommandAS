@@ -1,3 +1,156 @@
-.new-user{
-    margin-left: 16px;
+// --- Variables ---
+$primary-blue: #0D47A1;
+$blue-light: #E3F2FD;
+$accent-orange: #FF6B35;
+$orange-hover: #E65100;
+$white: #ffffff;
+$bg-page: #F4F6F9;
+$text-dark: #2C3E50;
+
+// Colores de Roles
+$role-admin-bg: #E8EAF6; $role-admin-text: #3F51B5; // Azul Indigo
+$role-cajero-bg: #FFF3E0; $role-cajero-text: #EF6C00; // Naranja
+$role-cocinero-bg: #E8F5E9; $role-cocinero-text: #2E7D32; // Verde
+$role-cliente-bg: #F5F5F5; $role-cliente-text: #616161; // Gris
+
+.users-page {
+    background-color: $bg-page;
+    min-height: 100vh;
+}
+
+// Texto
+.text-primary-blue { color: $primary-blue; }
+.icon-title { color: $accent-orange; } // Icono del título en naranja para contraste
+
+// --- Buscador ---
+::ng-deep .search-field {
+    width: 100%;
+    max-width: 300px;
+    
+    .mdc-text-field--outlined {
+        background-color: $white !important;
+        border-radius: 25px !important; // Redondeado completo
+        height: 48px;
+    }
+    
+    // Centrar texto verticalmente en input denso
+    .mat-mdc-form-field-flex {
+        align-items: center;
+        height: 48px;
+    }
+}
+
+// --- Botón Nuevo Usuario ---
+.btn-new {
+    background-color: $accent-orange !important;
+    color: $white !important;
+    height: 48px;
+    border-radius: 25px !important; // Redondeado
+    font-weight: 600;
+    padding: 0 24px !important;
+    transition: all 0.2s;
+
+    &:hover {
+        background-color: $orange-hover !important;
+        transform: translateY(-2px);
+    }
+
+    mat-icon { margin-right: 8px; }
+}
+
+// --- Tabla Moderna ---
+.table-container {
+    border: 1px solid rgba(0,0,0,0.05);
+}
+
+.modern-table {
+    // Cabecera Azul Sólida
+    th.mat-mdc-header-cell {
+        background-color: $primary-blue;
+        color: $white;
+        font-size: 0.9rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        padding: 16px 20px;
+    }
+
+    // Filas
+    td.mat-mdc-cell {
+        padding: 12px 20px;
+        font-size: 0.95rem;
+        color: $text-dark;
+        border-bottom-color: rgba(0,0,0,0.04);
+    }
+
+    // Hover
+    tr.element-row {
+        transition: background-color 0.2s;
+        &:hover {
+            background-color: $blue-light;
+        }
+    }
+}
+
+// --- Avatar ---
+.avatar-circle {
+    width: 36px;
+    height: 36px;
+    background-color: rgba($primary-blue, 0.1);
+    color: $primary-blue;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 14px;
+}
+
+// --- Badges de Roles ---
+.role-badge {
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    display: inline-block;
+
+    &.role-0 { // Admin
+        background-color: $role-admin-bg;
+        color: $role-admin-text;
+    }
+    &.role-1 { // Cajero
+        background-color: $role-cajero-bg;
+        color: $role-cajero-text;
+    }
+    &.role-2 { // Cocinero
+        background-color: $role-cocinero-bg;
+        color: $role-cocinero-text;
+    }
+    &.role-3 { // Cliente
+        background-color: $role-cliente-bg;
+        color: $role-cliente-text;
+    }
+}
+
+// --- Botones de Acción (Iconos) ---
+.action-buttons {
+    button {
+        width: 36px;
+        height: 36px;
+        line-height: 36px;
+        
+        mat-icon { font-size: 20px; width: 20px; height: 20px; }
+    }
+
+    .btn-icon-edit {
+        color: $primary-blue;
+        &:hover { background-color: rgba($primary-blue, 0.1); }
+    }
+
+    .btn-icon-delete {
+        color: #D32F2F;
+        &:hover { background-color: rgba(211, 47, 47, 0.1); }
+    }
 }

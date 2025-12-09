@@ -1,0 +1,77 @@
+<div class="stats-page container-fluid p-4">
+  
+  <div class="header-section text-center mb-5">
+    <h1 class="text-primary-blue fw-bold m-0 d-flex justify-content-center align-items-center gap-2">
+      <mat-icon class="icon-title">pie_chart</mat-icon>
+      Mis Estadísticas
+    </h1>
+    <p class="text-muted mt-2">Descubre tus platos favoritos del mes</p>
+  </div>
+
+  @if (isLoading) {
+    <div class="d-flex justify-content-center py-5">
+      <mat-spinner diameter="50" class="spinner-blue"></mat-spinner>
+    </div>
+  } 
+  
+  @else if (hasFavorites) {
+    
+    <div class="row g-4 justify-content-center">
+      
+      <div class="col-12 col-md-6 col-lg-5">
+        <div class="card highlight-card h-100 border-0 shadow-lg text-center p-4">
+          <div class="card-body d-flex flex-column align-items-center justify-content-center">
+            
+            <div class="trophy-wrapper mb-3">
+              <mat-icon class="trophy-icon">emoji_events</mat-icon>
+            </div>
+            
+            <h3 class="fw-bold text-dark">¡Tu Top #1!</h3>
+            <p class="text-muted mb-2">Este mes no has parado de pedir:</p>
+            
+            <div class="top-product-badge">
+              {{ topProduct }}
+            </div>
+
+            <button mat-flat-button class="btn-action mt-4" [routerLink]="['/client/menu']">
+              <mat-icon>restart_alt</mat-icon>
+              <span>Pedir otra vez</span>
+            </button>
+
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 col-md-6 col-lg-5">
+        <div class="card chart-card h-100 border-0 shadow-sm p-4">
+          <div class="card-body">
+            <h4 class="text-center text-primary-blue fw-bold mb-4">Distribución de tus gustos</h4>
+            <div class="chart-container">
+              <canvas baseChart 
+                [data]="dataFavorites" 
+                [type]="'pie'" 
+                [options]="pieOptions">
+              </canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  } 
+  
+  @else {
+    <div class="empty-state-card text-center p-5 mx-auto shadow-sm bg-white rounded-4">
+      <div class="icon-circle mb-3 mx-auto">
+        <mat-icon>fastfood</mat-icon>
+      </div>
+      <h3 class="fw-bold text-muted">Aún no tienes estadísticas</h3>
+      <p class="text-muted mb-4">Realiza tu primer pedido este mes para desbloquear tus favoritos.</p>
+      
+      <button mat-stroked-button color="primary" class="btn-outline" [routerLink]="['/client/menu']">
+        Ir al Menú
+      </button>
+    </div>
+  }
+</div>

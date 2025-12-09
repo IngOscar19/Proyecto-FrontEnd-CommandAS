@@ -1,55 +1,226 @@
-mat-drawer-container{
+// --- Variables de Tema ---
+$primary-blue: #0D47A1;
+$blue-hover: #E3F2FD;
+$accent-orange: #FF6B35;
+$text-dark: #2C3E50;
+$text-light: #757575;
+$bg-app: #F4F6F9;
+$sidebar-width-collapsed: 70px;
+$sidebar-width-expanded: 240px;
+
+// --- Estructura Principal ---
+.main-container {
     height: 100vh;
-.icon-container{
-    display: flex;
-    flex-direction: column;
-    width: 56px;
-    gap: 16px;
-    padding: 16px;
+    background-color: $bg-app;
 }
-mat-drawer{
-    width: 48px;
-    transition-duration: 300ms;
-    &:hover{
-        width: 320px;
+
+// --- Sidebar (Drawer) ---
+.app-sidebar {
+    width: $sidebar-width-collapsed;
+    background: white;
+    border-right: 1px solid rgba(0,0,0,0.05);
+    transition: width 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    overflow: hidden;
+    z-index: 100;
+    box-shadow: 2px 0 8px rgba(0,0,0,0.02);
+
+    // Efecto de expansión al hover
+    &:hover {
+        width: $sidebar-width-expanded;
+        box-shadow: 4px 0 15px rgba(0,0,0,0.05);
+
+        .logo-text, .nav-label {
+            opacity: 1;
+            transform: translateX(0);
+        }
     }
 }
-.log-out{
-    padding: 16px;
 
-}
-nav{
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    height: 100%;
-}
-header{
-    padding: 16px;
-    display: flex;
-    gap: 16px;
-    justify-content: space-between;
-div{
+// --- Elementos del Menú ---
+.sidebar-header {
+    height: 64px;
     display: flex;
     align-items: center;
-    gap: 8px;
-    font-size: 16px;
-    font-weight: 500;
-    h2{
-        font-size: 24px;
+    padding-left: 22px; // Centrar icono visualmente
+    color: $primary-blue;
+    
+    .logo-icon {
+        font-size: 28px;
+        width: 28px;
+        height: 28px;
+        min-width: 28px;
+    }
+
+    .logo-text {
+        margin-left: 16px;
+        font-size: 1.2rem;
+        font-weight: 800;
+        white-space: nowrap;
+        opacity: 0;
+        transform: translateX(-10px);
+        transition: all 0.3s ease;
     }
 }
-h2,h3{
-    margin: 0;
+
+.separator {
+    height: 1px;
+    background-color: #eee;
+    margin: 0 16px 16px 16px;
 }
-}
-button{
+
+.nav-item {
     display: flex;
-    gap: 8px;
-    justify-content: flex-start;
-    height: 24px;
-    svg{
-        flex-shrink: 0;
+    align-items: center;
+    height: 50px;
+    padding-left: 22px;
+    text-decoration: none;
+    color: $text-light;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: transparent;
+    border: none;
+    width: 100%;
+    position: relative;
+
+    mat-icon {
+        font-size: 24px;
+        width: 24px;
+        height: 24px;
+        min-width: 24px;
+    }
+
+    .nav-label {
+        margin-left: 16px;
+        font-size: 1rem;
+        font-weight: 500;
+        white-space: nowrap;
+        opacity: 0;
+        transform: translateX(-10px);
+        transition: all 0.3s ease;
+    }
+
+    // Hover
+    &:hover {
+        background-color: $blue-hover;
+        color: $primary-blue;
+    }
+
+    // Activo (Ruta actual)
+    &.active-link {
+        background-color: rgba($primary-blue, 0.08);
+        color: $primary-blue;
+        border-right: 4px solid $accent-orange; // Indicador naranja
+
+        mat-icon {
+            color: $primary-blue;
+        }
+        
+        .nav-label {
+            font-weight: 700;
+        }
+    }
+
+    // Botón Salir
+    &.logout-item {
+        margin-top: auto;
+        color: #d32f2f;
+
+        &:hover {
+            background-color: #ffebee;
+        }
     }
 }
+
+// --- Header Superior ---
+.app-header {
+    height: 64px;
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 24px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+    position: sticky;
+    top: 0;
+    z-index: 90;
+
+    .header-left {
+        h2 {
+            margin: 0;
+            font-size: 1.25rem;
+            color: $text-dark;
+            font-weight: 600;
+        }
+        
+        .chef-brand {
+            display: flex;
+            align-items: center;
+            color: $accent-orange;
+            gap: 10px;
+        }
+    }
+
+    .header-right {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+    }
+}
+
+// --- Chip de Usuario ---
+.user-chip {
+    display: flex;
+    align-items: center;
+    background-color: $bg-app;
+    padding: 4px 12px 4px 4px;
+    border-radius: 30px;
+    border: 1px solid #e0e0e0;
+
+    .avatar {
+        width: 32px;
+        height: 32px;
+        background-color: $primary-blue;
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        font-size: 14px;
+        margin-right: 8px;
+    }
+
+    .username {
+        font-size: 0.9rem;
+        font-weight: 500;
+        color: $text-dark;
+        margin-right: 8px;
+    }
+
+    .role-badge {
+        font-size: 0.7rem;
+        text-transform: uppercase;
+        padding: 2px 6px;
+        border-radius: 4px;
+        background-color: #e0e0e0;
+        color: #666;
+        font-weight: 700;
+
+        &.badge-admin { background-color: $primary-blue; color: white; }
+        &.badge-chef { background-color: $accent-orange; color: white; }
+    }
+}
+
+// --- Content Wrapper ---
+.content-wrapper {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.page-content {
+    flex: 1;
+    overflow-y: auto; // Scroll solo en el contenido, no en el header
+    padding: 0; // El padding lo manejan los componentes hijos (container-fluid)
 }

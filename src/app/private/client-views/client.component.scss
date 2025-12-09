@@ -1,0 +1,175 @@
+// --- VARIABLES ---
+$sidebar-width: 260px;
+$primary-color: #ff5722;
+$sidebar-bg: #1f2937;
+$sidebar-text: #f3f4f6;
+$transition-speed: 0.3s;
+
+// --- LAYOUT GENERAL ---
+.client-layout {
+  display: flex;
+  min-height: 100vh;
+  background-color: #f9fafb;
+  position: relative;
+  overflow-x: hidden;
+}
+
+// --- SIDEBAR ---
+.sidebar {
+  width: $sidebar-width;
+  background-color: $sidebar-bg;
+  color: $sidebar-text;
+  display: flex;
+  flex-direction: column;
+  
+  // Posición fija para que siempre esté ahí
+  position: fixed; 
+  top: 0;
+  left: 0;
+  height: 100vh;
+  z-index: 1000;
+  
+  // Transición suave al abrir/cerrar
+  transition: transform $transition-speed ease;
+  box-shadow: 4px 0 10px rgba(0,0,0,0.1);
+
+  // ESTADO: CERRADO (Por defecto lo movemos fuera de la pantalla a la izquierda)
+  transform: translateX(-100%);
+
+  // ESTADO: ABIERTO (Lo traemos a la posición 0)
+  &.open {
+    transform: translateX(0);
+  }
+}
+
+// --- CONTENIDO PRINCIPAL ---
+.main-content {
+  flex: 1;
+  width: 100%;
+  min-height: 100vh;
+  transition: margin-left $transition-speed ease; // Animamos el margen
+  
+  // Por defecto (cuando sidebar está cerrado o en móvil) ocupa todo el ancho
+  margin-left: 0;
+
+  // Cuando el sidebar está abierto (y NO es móvil), empujamos el contenido
+  &.shifted {
+    @media (min-width: 768px) {
+      margin-left: $sidebar-width;
+      width: calc(100% - #{$sidebar-width});
+    }
+  }
+}
+
+// --- HEADER MÓVIL Y DE ESCRITORIO ---
+// Este header ahora sirve para ambos para contener el botón de menú
+.top-header {
+  background-color: white;
+  padding: 0.75rem 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  position: sticky;
+  top: 0;
+  z-index: 900;
+  height: 64px;
+
+  .brand-title {
+    font-weight: 800;
+    font-size: 1.2rem;
+    color: #1f2937;
+    // Solo mostramos el título aquí si el sidebar está cerrado
+    opacity: 0; 
+    transition: opacity 0.3s;
+    &.visible { opacity: 1; }
+  }
+}
+
+// --- ELEMENTOS DEL SIDEBAR ---
+.sidebar-header {
+  height: 64px; // Misma altura que el top-header
+  padding: 0 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+
+  .logo-area {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: $primary-color;
+  }
+}
+
+.user-info {
+  padding: 2rem 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  
+  .avatar-circle {
+    width: 45px;
+    height: 45px;
+    background-color: $primary-color;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-weight: bold;
+  }
+  
+  .user-details {
+    display: flex;
+    flex-direction: column;
+    .user-name { font-weight: 600; font-size: 0.9rem; }
+    .user-role { font-size: 0.75rem; opacity: 0.7; }
+  }
+}
+
+.sidebar-nav {
+  flex: 1;
+  padding: 1rem;
+  ul {
+    list-style: none; padding: 0; margin: 0;
+    li {
+      margin-bottom: 0.5rem;
+      a {
+        display: flex; align-items: center; gap: 1rem; padding: 0.8rem 1rem;
+        color: rgba(255,255,255,0.7); text-decoration: none; border-radius: 8px;
+        transition: all 0.2s;
+        &:hover, &.active {
+          background-color: rgba(255,255,255,0.1); color: white;
+        }
+        &.active { border-left: 4px solid $primary-color; }
+      }
+    }
+  }
+}
+
+.sidebar-footer {
+  padding: 1.5rem;
+  border-top: 1px solid rgba(255,255,255,0.1);
+  button {
+    width: 100%; display: flex; align-items: center; gap: 0.5rem;
+    padding: 0.75rem; background: none; border: 1px solid rgba(255,87,34, 0.3);
+    color: #ff8a65; border-radius: 8px; cursor: pointer; transition: 0.2s;
+    &:hover { background: rgba(255,87,34, 0.1); border-color: $primary-color; }
+  }
+}
+
+// --- OVERLAY (Solo Móvil) ---
+.overlay {
+  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(0,0,0,0.5); z-index: 950;
+  opacity: 0; pointer-events: none; transition: opacity 0.3s;
+  
+  // Solo mostramos overlay en móvil cuando está abierto
+  @media (max-width: 768px) {
+    &.show { opacity: 1; pointer-events: auto; }
+  }
+}

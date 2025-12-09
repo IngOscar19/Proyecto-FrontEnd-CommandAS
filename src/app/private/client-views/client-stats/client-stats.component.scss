@@ -1,0 +1,121 @@
+// --- Variables ---
+$primary-blue: #0D47A1;
+$accent-orange: #FF6B35;
+$orange-hover: #E65100;
+$bg-page: #F4F6F9;
+$white: #ffffff;
+$yellow-trophy: #FFC107;
+$yellow-bg: #FFF8E1;
+
+.stats-page {
+    background-color: $bg-page;
+    min-height: 100vh;
+}
+
+// Textos
+.text-primary-blue { color: $primary-blue; }
+.icon-title { color: $accent-orange; font-size: 32px; width: 32px; height: 32px; }
+
+// --- Tarjeta Highlight (Top 1) ---
+.highlight-card {
+    background: $white;
+    border-radius: 24px;
+    transition: transform 0.3s ease;
+
+    &:hover {
+        transform: translateY(-5px);
+    }
+
+    .trophy-wrapper {
+        width: 80px;
+        height: 80px;
+        background-color: $yellow-bg;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 0 0 8px rgba($yellow-trophy, 0.1);
+
+        .trophy-icon {
+            font-size: 48px;
+            width: 48px;
+            height: 48px;
+            color: $yellow-trophy;
+        }
+    }
+
+    .top-product-badge {
+        font-size: 1.5rem;
+        font-weight: 800;
+        color: $accent-orange;
+        background-color: rgba($accent-orange, 0.08);
+        padding: 10px 24px;
+        border-radius: 12px;
+        margin-top: 8px;
+        display: inline-block;
+    }
+
+    .btn-action {
+        background-color: $primary-blue !important;
+        color: white !important;
+        padding: 0 24px;
+        height: 48px;
+        border-radius: 25px;
+        font-weight: 600;
+        
+        mat-icon { margin-right: 8px; }
+        
+        &:hover {
+            background-color: darken($primary-blue, 5%) !important;
+        }
+    }
+}
+
+// --- Tarjeta Gráfica ---
+.chart-card {
+    border-radius: 24px;
+    background: $white;
+}
+
+.chart-container {
+    position: relative;
+    height: 300px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+// --- Empty State ---
+.empty-state-card {
+    max-width: 500px;
+    
+    .icon-circle {
+        width: 80px;
+        height: 80px;
+        background-color: #ECEFF1;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        mat-icon {
+            font-size: 40px;
+            width: 40px;
+            height: 40px;
+            color: #B0BEC5;
+        }
+    }
+
+    .btn-outline {
+        border: 2px solid $primary-blue;
+        color: $primary-blue;
+        font-weight: 700;
+        padding: 0 30px;
+        border-radius: 25px;
+    }
+}
+
+// Spinner
+::ng-deep .spinner-blue circle {
+    stroke: $primary-blue !important;
+}

@@ -1,0 +1,77 @@
+<div class="favorites-page container-fluid p-4">
+  
+  <div class="header-section text-center mb-5">
+    <h1 class="text-primary-blue fw-bold m-0 d-flex justify-content-center align-items-center gap-2">
+      <mat-icon class="icon-title text-orange">favorite</mat-icon>
+      Mis Favoritos
+    </h1>
+    <p class="text-muted mt-2">Tus platillos preferidos siempre a la mano</p>
+  </div>
+
+  @if (isLoading) {
+    <div class="d-flex justify-content-center py-5">
+      <mat-spinner diameter="50" class="spinner-blue"></mat-spinner>
+    </div>
+  } 
+  
+  @else if (favorites.length === 0) {
+    <div class="empty-state text-center p-5 mx-auto bg-white rounded-4 shadow-sm">
+      <div class="icon-circle mb-3 mx-auto">
+        <mat-icon>favorite_border</mat-icon>
+      </div>
+      <h3 class="fw-bold text-muted">Aún no tienes favoritos</h3>
+      <p class="text-muted mb-4">Ve al menú y marca con ❤️ lo que más te guste.</p>
+      <button mat-flat-button color="primary" class="btn-action" routerLink="/client/menu">
+        Ir al Menú
+      </button>
+    </div>
+  } 
+  
+  @else {
+    <div class="row g-4">
+      @for (product of favorites; track product.idproducts) {
+        <div class="col-12 col-md-6 col-lg-4 col-xl-3">
+          
+          <mat-card class="favorite-card h-100 border-0 shadow-sm">
+            
+            <div class="card-img-container">
+               <button mat-icon-button class="remove-btn shadow-sm" (click)="removeFavorite(product)" matTooltip="Quitar de favoritos">
+                  <mat-icon color="warn">favorite</mat-icon>
+               </button>
+
+               <img [src]="getProductImage(product.name)" 
+                    #imgFav 
+                    (error)="imgFav.src = 'assets/Snack.png'" 
+                    [alt]="product.name"
+                    class="product-img">
+            </div>
+            
+            <mat-card-content class="p-3 d-flex flex-column flex-grow-1">
+              <div class="mb-2">
+                  @if(product.category_name) {
+                    <span class="category-badge mb-2 d-inline-block">{{ product.category_name }}</span>
+                  }
+                  <h3 class="product-title m-0">{{ product.name }}</h3>
+              </div>
+              
+              <p class="product-desc text-muted flex-grow-1">
+                {{ product.description || 'Delicioso platillo preparado al momento.' }}
+              </p>
+
+              <mat-divider class="my-3 opacity-50"></mat-divider>
+              
+              <div class="d-flex justify-content-between align-items-center">
+                 <span class="product-price">{{ product.price | currency }}</span>
+                 <button mat-stroked-button color="primary" class="btn-view" routerLink="/client/menu">
+                    Ver en Menú
+                 </button>
+              </div>
+            </mat-card-content>
+            
+          </mat-card>
+
+        </div>
+      }
+    </div>
+  }
+</div>

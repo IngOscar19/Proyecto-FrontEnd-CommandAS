@@ -1,0 +1,88 @@
+<div class="client-layout">
+  
+  <aside class="sidebar" [class.open]="isSidebarOpen">
+    
+    <div class="sidebar-header">
+      <div class="logo-area">
+        <mat-icon class="logo-icon">lunch_dining</mat-icon>
+        <span class="logo-text">AS Burger</span>
+      </div>
+      
+      <button mat-icon-button class="close-btn d-md-none" (click)="toggleSidebar()" *ngIf="isMobile">
+        <mat-icon>chevron_left</mat-icon>
+      </button>
+    </div>
+
+    <div class="user-info">
+      <div class="avatar-circle">
+        {{ currentUser?.name?.charAt(0) || 'C' }}
+      </div>
+      <div class="user-details">
+        <span class="user-name">{{ currentUser?.name || 'Cliente' }}</span>
+        <span class="user-role">Cliente Frecuente</span>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <ul>
+        <li>
+          <a routerLink="/client/menu" routerLinkActive="active" (click)="isMobile ? toggleSidebar() : null">
+            <mat-icon>restaurant_menu</mat-icon>
+            <span>Nuevo Pedido</span>
+          </a>
+        </li>
+        <li>
+          <a routerLink="/client/orders" routerLinkActive="active" (click)="isMobile ? toggleSidebar() : null">
+            <mat-icon>receipt_long</mat-icon>
+            <span>Mis Órdenes</span>
+          </a>
+        </li>
+        <li>
+          <a routerLink="/client/profile" routerLinkActive="active" (click)="isMobile ? toggleSidebar() : null">
+            <mat-icon>person</mat-icon>
+            <span>Mi Perfil</span>
+          </a>
+        </li>
+        <li>
+          <a routerLink="/client/stats" routerLinkActive="active" (click)="isMobile ? toggleSidebar() : null">
+            <mat-icon>pie_chart</mat-icon> <span>Mis Estadísticas</span>
+          </a>
+        </li>
+        <li>
+          <a routerLink="/client/favorites" routerLinkActive="active" (click)="isMobile ? toggleSidebar() : null">
+            <mat-icon>favorite</mat-icon>
+            <span>Mis Favoritos</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+
+    <div class="sidebar-footer">
+      <button class="logout-btn" (click)="logout()">
+        <mat-icon>logout</mat-icon>
+        <span>Cerrar Sesión</span>
+      </button>
+    </div>
+  </aside>
+
+  <main class="main-content" [class.shifted]="isSidebarOpen">
+    
+    <header class="top-header">
+      <button mat-icon-button (click)="toggleSidebar()">
+        <mat-icon>menu</mat-icon>
+      </button>
+
+      <span class="brand-title" [class.visible]="!isSidebarOpen">
+        AS Burger
+      </span>
+    </header>
+
+    <div class="content-wrapper">
+      <router-outlet></router-outlet>
+    </div>
+
+  </main>
+  
+  <div class="overlay" [class.show]="isSidebarOpen" (click)="toggleSidebar()"></div>
+
+</div>

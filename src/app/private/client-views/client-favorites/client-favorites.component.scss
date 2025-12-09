@@ -1,0 +1,142 @@
+// --- Variables ---
+$primary-blue: #0D47A1;
+$accent-orange: #FF6B35;
+$orange-hover: #E65100;
+$bg-page: #F4F6F9;
+$white: #ffffff;
+$text-dark: #2C3E50;
+
+.favorites-page {
+    background-color: $bg-page;
+    min-height: 100vh;
+}
+
+// Textos
+.text-primary-blue { color: $primary-blue; }
+.text-orange { color: $accent-orange; }
+.icon-title { font-size: 32px; width: 32px; height: 32px; }
+
+// --- Tarjeta de Producto ---
+.favorite-card {
+    border-radius: 16px !important;
+    background: $white;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    overflow: hidden;
+
+    &:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0,0,0,0.08) !important;
+
+        // Efecto Zoom en imagen al hacer hover en la tarjeta
+        .product-img {
+            transform: scale(1.1);
+        }
+    }
+}
+
+// Contenedor de Imagen
+.card-img-container {
+    height: 180px;
+    background: radial-gradient(circle, #ffffff 0%, #f8f9fa 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    padding: 20px;
+    overflow: hidden;
+
+    .product-img {
+        max-height: 100%;
+        max-width: 100%;
+        object-fit: contain;
+        transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        filter: drop-shadow(0 5px 10px rgba(0,0,0,0.1));
+    }
+
+    // Botón flotante de corazón
+    .remove-btn {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background-color: rgba(255,255,255,0.9);
+        z-index: 10;
+        
+        &:hover {
+            background-color: #fff;
+            transform: scale(1.1);
+        }
+    }
+}
+
+// Contenido
+.category-badge {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: $primary-blue;
+    background-color: rgba($primary-blue, 0.08);
+    padding: 4px 8px;
+    border-radius: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.product-title {
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: $text-dark;
+    line-height: 1.2;
+}
+
+.product-desc {
+    font-size: 0.85rem;
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 2; // Limita a 2 líneas
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.product-price {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: $accent-orange;
+}
+
+.btn-view {
+    border-radius: 20px;
+    font-weight: 600;
+}
+
+// --- Empty State ---
+.empty-state {
+    max-width: 500px;
+    
+    .icon-circle {
+        width: 80px;
+        height: 80px;
+        background-color: #ECEFF1;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        mat-icon {
+            font-size: 40px;
+            width: 40px;
+            height: 40px;
+            color: #B0BEC5;
+        }
+    }
+
+    .btn-action {
+        background-color: $accent-orange !important;
+        color: white;
+        padding: 0 24px;
+        border-radius: 25px;
+    }
+}
+
+// Spinner
+::ng-deep .spinner-blue circle {
+    stroke: $primary-blue !important;
+}

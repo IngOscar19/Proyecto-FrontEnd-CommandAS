@@ -1,0 +1,159 @@
+// --- Variables Globales ---
+$primary-blue: #0D47A1;
+$accent-orange: #FF6B35;
+$bg-page: #F4F6F9;
+$white: #ffffff;
+$text-dark: #2C3E50;
+
+// --- Colores de Estado ---
+// 0: Pendiente | 1: Preparando | 2: Lista | 3: Entregada | 4: Cancelada
+$st-0-bg: #ECEFF1; $st-0-text: #546E7A; 
+$st-1-bg: #FFF3E0; $st-1-text: #E65100; 
+$st-2-bg: #E8F5E9; $st-2-text: #2E7D32; 
+$st-3-bg: #E3F2FD; $st-3-text: #1565C0; 
+$st-4-bg: #FFEBEE; $st-4-text: #C62828; 
+
+.orders-page {
+    background-color: $bg-page;
+    min-height: 100vh;
+}
+
+.text-primary-blue { color: $primary-blue; }
+.icon-title { color: $accent-orange; }
+
+// --- Filtros (Pestañas) ---
+.filters-container {
+    overflow-x: auto;
+    padding-bottom: 4px;
+    &::-webkit-scrollbar { display: none; }
+    scrollbar-width: none;
+}
+
+.filter-btn {
+    border: 1px solid #E0E0E0;
+    background-color: $white;
+    color: #757575;
+    padding: 8px 20px;
+    border-radius: 25px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+
+    &:hover {
+        background-color: #F5F5F5;
+        transform: translateY(-1px);
+    }
+
+    &.active {
+        background-color: $primary-blue;
+        color: $white;
+        border-color: $primary-blue;
+        box-shadow: 0 4px 10px rgba($primary-blue, 0.3);
+    }
+
+    .badge-count {
+        background-color: $accent-orange;
+        color: white;
+        font-size: 0.75rem;
+        padding: 2px 7px;
+        border-radius: 10px;
+        line-height: 1;
+    }
+}
+
+// --- Empty State ---
+.empty-state {
+    .icon-circle {
+        width: 80px;
+        height: 80px;
+        background-color: rgba($primary-blue, 0.1);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        
+        mat-icon {
+            font-size: 40px;
+            width: 40px;
+            height: 40px;
+            color: $primary-blue;
+        }
+    }
+
+    .btn-order {
+        background-color: $accent-orange !important;
+        color: white;
+        padding: 0 24px;
+        border-radius: 20px;
+    }
+}
+
+// --- Tarjetas de Orden ---
+.order-card {
+    border-radius: 16px !important;
+    background: $white;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    overflow: hidden;
+
+    &:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.08) !important;
+    }
+
+    .tiny-icon {
+        font-size: 14px;
+        width: 14px;
+        height: 14px;
+    }
+
+    .price-text {
+        font-size: 1.5rem;
+        font-weight: 800;
+        color: $accent-orange;
+    }
+}
+
+// --- Chips de Estado ---
+.status-chip {
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+
+    &.status-0 { background-color: $st-0-bg; color: $st-0-text; }
+    &.status-1 { background-color: $st-1-bg; color: $st-1-text; }
+    &.status-2 { background-color: $st-2-bg; color: $st-2-text; }
+    &.status-3 { background-color: $st-3-bg; color: $st-3-text; }
+    &.status-4 { background-color: $st-4-bg; color: $st-4-text; }
+}
+
+// --- Barra Inferior ---
+.status-bar {
+    height: 4px;
+    width: 100%;
+    
+    &.bar-0 { background-color: $st-0-text; }
+    &.bar-1 { background-color: $st-1-text; }
+    &.bar-2 { background-color: $st-2-text; }
+    &.bar-3 { background-color: $st-3-text; }
+    &.bar-4 { background-color: $st-4-text; }
+}
+
+// --- Caja Comentarios ---
+.comments-box {
+    background-color: #FAFAFA;
+    border: 1px dashed #E0E0E0;
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-size: 0.85rem;
+    color: #757575;
+    display: flex;
+    align-items: center;
+}

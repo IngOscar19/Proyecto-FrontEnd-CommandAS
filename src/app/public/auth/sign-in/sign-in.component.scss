@@ -1,25 +1,149 @@
-section {
-    display: flex;
-    flex-direction: column;
-    gap: 48px;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-.form {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    max-width: 384px;
-    justify-content: center;
+// --- Variables de Color ---
+$blue-primary: #2196F3;
+$blue-dark: #1565C0;
+$blue-soft: #E3F2FD;
+
+$orange-primary: #FF6B35;
+$orange-accent: #FF8C42;
+
+$white: #ffffff;
+$gray-bg: #F8F9FA;
+$text-dark: #2C3E50;
+
+// --- Estilos Generales ---
+.login-page {
+    background-color: $gray-bg;
+    position: relative;
+    
+    // Fondo sutil mezclado
+    background: radial-gradient(circle at top left, rgba($blue-primary, 0.05), transparent 70%),
+                radial-gradient(circle at bottom right, rgba($orange-primary, 0.05), transparent 70%);
 }
-img {
-    width: 100%;
-    max-width: 256px;
+
+// --- Animación de Fondo (Burbujas) ---
+.bg-shape {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    z-index: 1;
+    opacity: 0.6;
+    animation: float-bg 20s infinite alternate ease-in-out;
 }
-.button-secundary{
-    margin-top: 16px;
-    width: 100%;
-    max-width: 384px;
-    text-align: center;
+
+.shape-blue {
+    top: -10%;
+    right: -10%;
+    width: 500px;
+    height: 500px;
+    background: rgba($blue-primary, 0.15);
 }
+
+.shape-orange {
+    bottom: -10%;
+    left: -10%;
+    width: 400px;
+    height: 400px;
+    background: rgba($orange-primary, 0.15);
+    animation-delay: -10s;
+}
+
+@keyframes float-bg {
+    0% { transform: translate(0, 0) rotate(0deg); }
+    100% { transform: translate(30px, 50px) rotate(20deg); }
+}
+
+// --- Tarjeta de Login ---
+.login-card {
+    background: rgba($white, 0.9); // Efecto sutil de transparencia
+    backdrop-filter: blur(10px); // Glassmorphism ligero
+    border-radius: 24px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+    transition: transform 0.3s ease;
+
+    &:hover {
+        transform: translateY(-5px);
+    }
+}
+
+.text-dark-blue {
+    color: $text-dark;
+}
+
+.logo-wrapper {
+    width: 120px;
+    // Animación suave del logo
+    img {
+        width: 100%;
+        filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1));
+        animation: float-logo 4s ease-in-out infinite;
+    }
+}
+
+@keyframes float-logo {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+}
+
+// --- Personalización de Angular Material ---
+::ng-deep {
+    .custom-field {
+        width: 100%;
+        
+        // Iconos en Naranja
+        .mat-icon.icon-orange {
+            color: $orange-primary;
+            margin-right: 8px;
+        }
+
+        // Borde y fondo del input
+        .mdc-text-field--outlined {
+            background-color: $white !important;
+            border-radius: 12px !important;
+            
+            // Color del borde al enfocar (Naranja para contraste)
+            &.mdc-text-field--focused .mdc-notched-outline__leading,
+            &.mdc-text-field--focused .mdc-notched-outline__notch,
+            &.mdc-text-field--focused .mdc-notched-outline__trailing {
+                border-color: $orange-primary !important;
+                border-width: 2px;
+            }
+        }
+        
+        // Label color
+        .mdc-floating-label--float-above {
+            color: $blue-dark !important;
+            font-weight: 600;
+        }
+    }
+}
+
+// --- Botones ---
+.btn-login {
+    height: 50px;
+    border-radius: 12px !important;
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    // Gradiente Azul vibrante
+    background: linear-gradient(135deg, $blue-primary 0%, $blue-dark 100%) !important;
+    transition: all 0.3s ease;
+
+    &:hover {
+        box-shadow: 0 8px 20px rgba($blue-primary, 0.4);
+        transform: translateY(-2px);
+    }
+}
+
+.btn-signup {
+    height: 48px;
+    border-radius: 12px !important;
+    border: 2px solid $orange-primary !important; // Borde naranja
+    color: $orange-primary !important;
+    font-weight: 700;
+    
+    &:hover {
+        background-color: $orange-primary !important;
+        color: $white !important; // Texto blanco al hacer hover
+        box-shadow: 0 4px 15px rgba($orange-primary, 0.3);
+    }
 }

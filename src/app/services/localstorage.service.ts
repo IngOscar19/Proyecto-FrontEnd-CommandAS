@@ -4,16 +4,31 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class LocalstorageService {
-  //Funcion para asignar en el localstorage una llave y su valor mediante data y convirtiendo esta data en formato JSON
-  public async setItem(key:string, data:any){
-      localStorage.setItem(key,JSON.stringify(data));
+
+  constructor() { }
+
+ 
+  setItem(key: string, value: any) {
+    sessionStorage.setItem(key, JSON.stringify(value));
   }
-  //Funcion para tomar valores del localstorage mediante una llave
-  public getItem(key: string){
-    return JSON.parse(localStorage.getItem(key) || 'null');
+
+ 
+  getItem(key: string) {
+    const item = sessionStorage.getItem(key);
+    try {
+      return item ? JSON.parse(item) : null;
+    } catch (e) {
+      return item;
+    }
   }
-  //Funcion para borrar el localstorage
-  public clear(){
-    localStorage.clear();
+
+  
+  removeItem(key: string) {
+    sessionStorage.removeItem(key);
+  }
+
+ 
+  clear() {
+    sessionStorage.clear();
   }
 }

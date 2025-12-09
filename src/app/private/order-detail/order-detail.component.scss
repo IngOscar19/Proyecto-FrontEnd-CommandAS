@@ -1,0 +1,213 @@
+// Variables
+$primary-blue: #0D47A1;
+$accent-orange: #FF6B35;
+$bg-light: #F5F5F5;
+$text-dark: #2C3E50;
+$red-remove: #D32F2F;
+$red-bg: #FFEBEE;
+$green-add: #2E7D32;
+$green-bg: #E8F5E9;
+$note-bg: #FFF9C4; // Amarillo post-it
+$note-text: #F57F17;
+
+// Contenedor principal (Dialog)
+.ticket-container {
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+// --- Encabezado ---
+.ticket-header {
+    background-color: $primary-blue;
+    padding: 16px 24px;
+    color: white;
+
+    h2 {
+        font-size: 1.2rem;
+        font-weight: 600;
+    }
+
+    .client-info {
+        background: rgba(255,255,255,0.15);
+        padding: 8px 12px;
+        border-radius: 8px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        .label { opacity: 0.9; font-size: 0.85rem; }
+        .value { font-weight: 700; font-size: 1rem; letter-spacing: 0.5px; }
+    }
+}
+
+// --- Cuerpo ---
+.ticket-body {
+    padding: 0 !important;
+    background-color: $bg-light;
+    flex-grow: 1;
+    overflow-y: auto;
+}
+
+.products-list {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+// Item Producto
+.product-item {
+    background: white;
+    border-radius: 10px;
+    padding: 16px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    border-left: 4px solid $primary-blue; // Indicador visual
+
+    .product-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 8px;
+
+        .product-name {
+            .category-badge {
+                font-size: 0.65rem;
+                text-transform: uppercase;
+                background: #EEEEEE;
+                padding: 2px 6px;
+                border-radius: 4px;
+                color: #757575;
+                font-weight: 700;
+                display: inline-block;
+                margin-bottom: 4px;
+            }
+            h4 {
+                margin: 0;
+                font-size: 1.1rem;
+                font-weight: 800;
+                color: $text-dark;
+                line-height: 1.2;
+            }
+        }
+
+        .product-price {
+            font-weight: 700;
+            color: $accent-orange;
+            font-size: 1rem;
+        }
+    }
+}
+
+// --- Chips de Ingredientes ---
+.ingredients-section {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px dashed #E0E0E0;
+}
+
+.ingredient-chip {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    
+    mat-icon {
+        font-size: 14px;
+        width: 14px;
+        height: 14px;
+        margin-right: 4px;
+    }
+
+    // Estilo "SIN"
+    &.chip-removed {
+        background-color: $red-bg;
+        color: $red-remove;
+        border: 1px solid rgba($red-remove, 0.2);
+    }
+
+    // Estilo "EXTRA"
+    &.chip-extra {
+        background-color: $green-bg;
+        color: $green-add;
+        border: 1px solid rgba($green-add, 0.2);
+    }
+}
+
+// --- Notas ---
+.kitchen-note {
+    margin-top: 10px;
+    background-color: $note-bg;
+    color: #5D4037;
+    padding: 8px;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    display: flex;
+    align-items: flex-start;
+    border: 1px dashed darken($note-bg, 15%);
+
+    mat-icon {
+        color: $note-text;
+        font-size: 16px;
+        width: 16px;
+        height: 16px;
+        margin-right: 6px;
+        margin-top: 2px; // Alinear con texto
+    }
+}
+
+// --- Resumen ---
+.ticket-summary {
+    background: white;
+    padding: 16px 24px;
+    border-top: 1px solid #E0E0E0;
+    
+    .general-comments {
+        margin-bottom: 12px;
+        font-size: 0.9rem;
+        color: #616161;
+        background: #FAFAFA;
+        padding: 8px;
+        border-radius: 6px;
+        
+        p { margin: 4px 0 0; font-style: italic; }
+    }
+
+    .total-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: $text-dark;
+        
+        .total-amount {
+            color: $accent-orange;
+            font-size: 1.4rem;
+        }
+    }
+}
+
+// --- Acciones ---
+.ticket-actions {
+    padding: 12px 24px;
+    background: #FAFAFA;
+    border-top: 1px solid #E0E0E0;
+
+    .btn-ready {
+        background-color: $accent-orange !important;
+        color: white !important;
+        padding: 0 24px;
+        font-weight: 600;
+        
+        &:hover {
+            background-color: darken($accent-orange, 5%) !important;
+        }
+    }
+}

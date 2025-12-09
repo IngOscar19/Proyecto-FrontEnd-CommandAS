@@ -1,22 +1,96 @@
-
-    <h2 mat-dialog-title>Detalles de la orden</h2>
-
-    <mat-dialog-content>
-        <h3>Cliente: {{orderDetails?.[0]?.client}}</h3>
-        <div class="order-container">
-            @for (eachOrder of orderDetails; track $index) {
-            <div class="order">
-                <h4>{{eachOrder?.category}} {{eachOrder?.product}}</h4>
-                @for (notIngredient of eachOrder?.ingredients; track $index) {
-                <h5>{{notIngredient?.type==0?'Sin':'Extra'}} {{notIngredient?.name}}</h5>
-                }
-            </div>
-        }
+<div class="ticket-container">
+    
+    <div class="ticket-header">
+        <div class="d-flex justify-content-between align-items-center">
+            <h2 mat-dialog-title class="m-0 d-flex align-items-center text-white">
+                <mat-icon class="me-2">receipt_long</mat-icon>
+                Comanda #{{ _data?.idorder | slice:0:6 }}
+            </h2>
+            <button mat-icon-button class="text-white opacity-75" [mat-dialog-close]="false">
+                <mat-icon>close</mat-icon>
+            </button>
         </div>
+        
+        <div class="client-info mt-2">
+            <span class="label">Cliente:</span>
+            <span class="value">{{ orderDetails[0]?.client || 'Cliente Mostrador' }}</span>
+        </div>
+    </div>
+
+    <mat-dialog-content class="ticket-body">
+        
+        <div class="products-list">
+            @for (eachOrder of orderDetails; track eachOrder.idorderdetail || $index) {
+                <div class="product-item">
+                    
+                    <div class="product-header">
+                        <div class="product-name">
+                            <span class="category-badge">{{ eachOrder?.category }}</span>
+                            <h4>{{ eachOrder?.product }}</h4>
+                        </div>
+                        
+                        <div class="product-price">
+                            {{ eachOrder.unit_price | currency }}
+                        </div>
+                    </div>
+
+                    @if (hasIngredients(eachOrder)) {
+                        <div class="ingredients-section">
+                            @for (ing of eachOrder.ingredients; track ing.idnot_ingredient || $index) {
+                                
+                                @if (ing.type === 0) {
+                                    <span class="ingredient-chip chip-removed">
+                                        <mat-icon>block</mat-icon>
+                                        Sin {{ ing.name }}
+                                    </span>
+                                }
+
+                                @if (ing.type === 1) {
+                                    <span class="ingredient-chip chip-extra">
+                                        <mat-icon>add_circle</mat-icon>
+                                        Extra {{ ing.name }}
+                                    </span>
+                                }
+                            }
+                        </div>
+                    }
+
+                    </div>
+            } @empty {
+                <div class="empty-state py-5 text-center text-muted">
+                    <mat-icon style="font-size: 48px; width: 48px; height: 48px;">no_meals</mat-icon>
+                    <p class="mt-2">Cargando detalles...</p>
+                </div>
+            }
+        </div>
+
+        <div class="ticket-summary">
+            
+            @if (orderDetails && orderDetails[0]?.order_comments) {
+                <div class="general-comments">
+                    <strong><mat-icon class="align-bottom me-1">comment</mat-icon> Notas Generales:</strong>
+                    <p>{{ orderDetails[0].order_comments }}</p>
+                </div>
+            }
+
+            <div class="total-row">
+                <span>TOTAL</span>
+                <span class="total-amount">{{ orderDetails[0]?.total | currency }}</span>
+            </div>
+        </div>
+
     </mat-dialog-content>
 
-    <mat-dialog-actions align="end" class="flex gap-x-2">
-        @if (_router.url == '/private/chef-order-view') {
-        <button [mat-dialog-close]="true" class="button-primary" cdkFocusInitial (click)="updateStatus()">Orden Lista</button>
+    <mat-dialog-actions align="end" class="ticket-actions">
+        <button mat-stroked-button color="warn" [mat-dialog-close]="false">
+            Cerrar
+        </button>
+
+        @if (_router.url === '/private/chef-order-view') {
+            <button mat-flat-button class="btn-ready" (click)="updateStatus()" cdkFocusInitial>
+                <mat-icon>dinner_dining</mat-icon>
+                ¡Orden Lista!
+            </button>
         }
     </mat-dialog-actions>
+</div>

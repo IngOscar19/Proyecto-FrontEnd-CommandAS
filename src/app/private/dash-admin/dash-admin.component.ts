@@ -1,107 +1,144 @@
-import { Component, ViewChild, inject } from '@angular/core';
-import { ChartData } from 'chart.js';
+import { Component, ViewChild, inject, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { ChartConfiguration, ChartData, ChartOptions } from 'chart.js'; // Importa ChartOptions
 import { BaseChartDirective } from 'ng2-charts';
 import { ProviderService } from '../../services/provider.service';
-import { MatButtonModule } from '@angular/material/button';
-import {MatCardModule} from '@angular/material/card';
-import {MatDividerModule} from '@angular/material/divider';
-import {MatListModule} from '@angular/material/list';
+import { MatCardModule } from '@angular/material/card';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatIconModule } from '@angular/material/icon'; // ✅ Agregado
 import { WebSocketsService } from '../../services/web-sockets.service';
-
 
 @Component({
   selector: 'app-dash-admin',
   standalone: true,
-  imports: [BaseChartDirective, MatCardModule, MatButtonModule,MatListModule, MatDividerModule],
+  imports: [
+    CommonModule,
+    BaseChartDirective, 
+    MatCardModule, 
+    MatDividerModule,
+    MatIconModule // ✅ Agregado
+  ],
   templateUrl: './dash-admin.component.html',
   styleUrl: './dash-admin.component.scss'
 })
-export class DashAdminComponent {
-private _provider: ProviderService = inject(ProviderService);
-private _wsService: WebSocketsService = inject(WebSocketsService);
-products: any = [];
-clients: any = [];
-avg: any = [];
-total: any = [];
-sales: any = [];
-dataSales!: ChartData<'bar'>;
-dataProduct!: ChartData<'bar'>;
-dataClient!: ChartData<'bar'>;
-totalSum: number = 0;
-@ViewChild(BaseChartDirective) chartSales!: BaseChartDirective;
-async ngOnInit() {
-  this.Sales();
-  this.bestSeller();
-  this.bestClient();
-  this.total = await this._provider.request('GET', 'graphics/totalSales');
-  this.avg = await this._provider.request('GET', 'graphics/avgTime');
-  this.listenGraphics();
-}
-async listenGraphics() {
-  this._wsService.listen('grafica').subscribe((data) => {
-    let btotal: number = parseInt(data.total ?? 0);
-    let atotal: number = this.dataSales.datasets[0].data[data.mes - 1] as number ?? 0;
-    this.dataSales.datasets[0].data[data.mes - 1] = btotal + atotal;
-    this.total.total = parseInt(this.total.total) + data.total;
-    console.log(data);
-    
-    this.chartSales.update();
-  });
-}
-async Sales() {
-  this.sales = await this._provider.request('GET', 'graphics/sales');
-  this.dataSales = {
-    labels: this.sales.labels,
-    datasets: [
-      {
-        data: this.sales.data, 
-        label: 'Total', 
-        backgroundColor: [
-          'rgba(255, 99, 132, 0.2)',
-          'rgba(255, 159, 64, 0.2)',
-          'rgba(255, 205, 86, 0.2)',
-          'rgba(75, 192, 192, 0.2)',
-          'rgba(54, 162, 235, 0.2)',
-          'rgba(153, 102, 255, 0.2)',
-          'rgba(201, 203, 207, 0.2)'
-        ],
-      }
-    ]
-  };
-}
-async bestSeller() {
-  this.products = await this._provider.request('GET', 'graphics/bestSeller', { mes: 5 });
-  this.dataProduct = {
-    labels: this.products.labels,
-    datasets: [
-      {
-        data: this.products.data, 
-        label: 'Cantidad', 
-        backgroundColor: [
-          'rgba(255, 99, 132, 0.2)',
-          'rgba(255, 159, 64, 0.2)',
-          'rgba(255, 205, 86, 0.2)'
-        ],
-      }
-    ]
-  };
-}
-async bestClient() {
-  this.clients = await this._provider.request('GET', 'graphics/bestClient');
-  this.dataClient = {
-    labels: this.clients.labels,
-    datasets: [
-      {
-        data: this.clients.data, 
-        label: 'No. de compras', 
-        backgroundColor: [
-          'rgba(255, 99, 132, 0.2)',
-          'rgba(255, 159, 64, 0.2)',
-          'rgba(255, 205, 86, 0.2)'
-        ],
-      }
-    ]
-  };
-}
+export class DashAdminComponent implements OnInit {
+  private _provider: ProviderService = inject(ProviderService);
+  private _wsService: WebSocketsService = inject(WebSocketsService);
+  
+  products: any = [];
+  clients: any = [];
+  
+  // Inicializamos objetos para evitar errores en el template
+  avg: any = { minutos: 0 };
+  total: any = { total: 0 };
+  sales: any = [];
+  
+  dataSales!: ChartData<'bar'>;
+  dataClient!: ChartData<'bar'>;
+  dataProduct!: ChartData<'pie'>; 
+  
+  @ViewChild(BaseChartDirective) chartSales!: BaseChartDirective;
 
+  // ✅ Opciones para hacer las gráficas bonitas y responsivas
+  public barChartOptions: ChartOptions<'bar'> = {
+    responsive: true,
+    maintainAspectRatio: false, // Permite que el CSS controle la altura
+    plugins: {
+      legend: { display: true, position: 'bottom' }
+    }
+  };
+
+  public pieChartOptions: ChartOptions<'pie'> = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { position: 'right' }
+    }
+  };
+
+  async ngOnInit() {
+    // Cargar datos
+    this.total = await this._provider.request('GET', 'graphics/totalSales') || { total: 0 };
+    this.avg = await this._provider.request('GET', 'graphics/avgTime') || { minutos: 0 };
+    
+    this.Sales();
+    this.bestSeller();
+    this.bestClient();
+    this.listenGraphics();
+  }
+
+  async listenGraphics() {
+    this._wsService.listen('grafica').subscribe((data) => {
+      // Lógica de actualización en tiempo real
+      let btotal: number = parseInt(data.total ?? 0);
+      let atotal: number = this.dataSales.datasets[0].data[data.mes - 1] as number ?? 0;
+      
+      this.dataSales.datasets[0].data[data.mes - 1] = btotal + atotal;
+      
+      // Actualizar total general
+      this.total.total = parseInt(this.total.total) + data.total;
+      
+      this.chartSales.update();
+    });
+  }
+
+  async Sales() {
+    this.sales = await this._provider.request('GET', 'graphics/sales');
+    this.dataSales = {
+      labels: this.sales.labels,
+      datasets: [
+        {
+          data: this.sales.data, 
+          label: 'Ventas ($)', 
+          // Color AZUL CORPORATIVO (#0D47A1) con opacidad
+          backgroundColor: 'rgba(13, 71, 161, 0.8)', 
+          borderColor: '#0D47A1',
+          borderWidth: 1,
+          borderRadius: 5 // Bordes redondeados en las barras
+        }
+      ]
+    };
+  }
+
+  async bestSeller() {
+    const currentMonth = new Date().getMonth() + 1;
+    this.products = await this._provider.request('GET', 'graphics/bestSeller', { mes: currentMonth });
+    
+    this.dataProduct = {
+      labels: this.products.labels,
+      datasets: [
+        {
+          data: this.products.data, 
+          // Paleta combinada: Azul, Naranja, y complementarios
+          backgroundColor: [
+            '#0D47A1', // Azul Principal
+            '#FF6B35', // Naranja Principal
+            '#42A5F5', // Azul Claro
+            '#FFCA28', // Amarillo
+            '#66BB6A', // Verde
+            '#AB47BC'  // Morado
+          ],
+          hoverOffset: 4
+        }
+      ]
+    };
+  }
+
+  async bestClient() {
+    this.clients = await this._provider.request('GET', 'graphics/bestClient');
+    this.dataClient = {
+      labels: this.clients.labels,
+      datasets: [
+        {
+          data: this.clients.data, 
+          label: 'Órdenes Realizadas', 
+          // Color NARANJA CORPORATIVO (#FF6B35) con opacidad
+          backgroundColor: 'rgba(255, 107, 53, 0.8)',
+          borderColor: '#FF6B35',
+          borderWidth: 1,
+          borderRadius: 5
+        }
+      ]
+    };
+  }
 }

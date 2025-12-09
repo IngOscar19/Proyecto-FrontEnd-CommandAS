@@ -1,0 +1,89 @@
+<div class="profile-page container-fluid p-4">
+  <div class="row justify-content-center">
+    <div class="col-12 col-lg-8 col-xl-6">
+      
+      <div class="card profile-card border-0 shadow-lg overflow-hidden">
+        
+        <div class="card-header-bg">
+          <div class="avatar-wrapper shadow">
+            <span class="initial">{{ profileForm.get('name')?.value?.charAt(0)?.toUpperCase() || 'U' }}</span>
+          </div>
+        </div>
+
+        <div class="card-body px-4 px-md-5 pt-5 pb-4">
+          
+          <div class="text-center mb-4 mt-3">
+            <h2 class="text-primary-blue fw-bold m-0">Mi Perfil</h2>
+            <p class="text-muted small">Administra tu información personal</p>
+          </div>
+
+          <form [formGroup]="profileForm" (ngSubmit)="onSubmit()" class="d-flex flex-column gap-3">
+            
+            <mat-form-field appearance="outline" class="custom-field">
+              <mat-label>Nombre Completo</mat-label>
+              <mat-icon matPrefix class="icon-orange">badge</mat-icon>
+              <input matInput formControlName="name" placeholder="Tu nombre">
+              <mat-error *ngIf="profileForm.get('name')?.hasError('required')">Requerido</mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="custom-field">
+              <mat-label>Correo Electrónico</mat-label>
+              <mat-icon matPrefix class="icon-orange">email</mat-icon>
+              <input matInput formControlName="email" placeholder="ejemplo@correo.com">
+              <mat-error *ngIf="profileForm.get('email')?.hasError('email')">Correo inválido</mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="custom-field">
+              <mat-label>Teléfono</mat-label>
+              <mat-icon matPrefix class="icon-orange">phone</mat-icon>
+              <input matInput formControlName="phone" placeholder="10 dígitos" type="tel">
+              <mat-error *ngIf="profileForm.get('phone')?.hasError('pattern')">10 dígitos requeridos</mat-error>
+            </mat-form-field>
+
+            <mat-divider class="my-3 opacity-50"></mat-divider>
+
+            <div class="password-section">
+              <h6 class="text-primary-blue fw-bold mb-3 d-flex align-items-center">
+                <mat-icon class="me-2 icon-sm">lock_reset</mat-icon> Cambio de Contraseña
+              </h6>
+
+              <div class="row g-2">
+                <div class="col-12 col-md-6">
+                  <mat-form-field appearance="outline" class="custom-field w-100">
+                    <mat-label>Nueva Contraseña</mat-label>
+                    <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password">
+                    <button mat-icon-button matSuffix type="button" (click)="hidePassword = !hidePassword">
+                      <mat-icon class="text-muted">{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+                    </button>
+                    <mat-error *ngIf="profileForm.get('password')?.hasError('minlength')">Mínimo 6 caracteres</mat-error>
+                  </mat-form-field>
+                </div>
+
+                <div class="col-12 col-md-6">
+                  <mat-form-field appearance="outline" class="custom-field w-100">
+                    <mat-label>Confirmar</mat-label>
+                    <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="confirm_password">
+                    <mat-error *ngIf="profileForm.hasError('mismatch')">No coinciden</mat-error>
+                  </mat-form-field>
+                </div>
+              </div>
+            </div>
+
+            <div class="d-flex justify-content-end mt-2">
+              <button mat-flat-button class="btn-save" type="submit" [disabled]="profileForm.invalid || isLoading">
+                @if (isLoading) {
+                  <mat-spinner diameter="20" class="spinner-white"></mat-spinner>
+                } @else {
+                  <span>ACTUALIZAR DATOS</span>
+                }
+              </button>
+            </div>
+
+          </form>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

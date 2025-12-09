@@ -1,10 +1,29 @@
-<h2 mat-dialog-title>Cancelar Orden</h2>
+<div class="dialog-container">
+    <div class="dialog-header">
+        <div class="icon-wrapper">
+            <mat-icon>warning_amber</mat-icon>
+        </div>
+        <h2 mat-dialog-title>¿Cancelar esta orden?</h2>
+    </div>
 
-<mat-dialog-content>
-    ¿Está seguro de cancelar esta orden?
-</mat-dialog-content>
+    <mat-dialog-content>
+        <p class="dialog-message">
+            Esta acción cambiará el estado de la orden a <strong>Cancelada</strong>. 
+            Esta acción no se puede deshacer.
+        </p>
+    </mat-dialog-content>
 
-<mat-dialog-actions align="end" class="flex gap-x-2">
-    <button [mat-dialog-close]="false" class="button-secundary">Cancelar</button>
-    <button [mat-dialog-close]="true" class="button-primary" cdkFocusInitial (click)="updateStatus()">Confirmar</button>
-</mat-dialog-actions>
+    <mat-dialog-actions align="end">
+        <button mat-button class="btn-cancel" [mat-dialog-close]="false">
+            No, volver
+        </button>
+        
+        <button mat-flat-button class="btn-confirm" (click)="updateStatus()" [disabled]="isLoading">
+            @if (isLoading) {
+                <span>Procesando...</span>
+            } @else {
+                <span>Sí, cancelar orden</span>
+            }
+        </button>
+    </mat-dialog-actions>
+</div>

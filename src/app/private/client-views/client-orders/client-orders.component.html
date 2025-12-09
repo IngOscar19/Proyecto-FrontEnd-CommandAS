@@ -1,0 +1,95 @@
+<div class="orders-page container-fluid p-4">
+  
+  <div class="header-section mb-4">
+    <h1 class="text-primary-blue fw-bold m-0 d-flex align-items-center">
+      <mat-icon class="me-2 icon-title">fastfood</mat-icon>
+      Mis Pedidos
+    </h1>
+    <p class="text-muted small m-0 ps-1">Historial y seguimiento en tiempo real</p>
+  </div>
+
+  <div class="filters-container mb-4 d-flex gap-2">
+    <button class="filter-btn" 
+            [class.active]="currentFilter === 'all'" 
+            (click)="applyFilter('all')">
+      Todas
+    </button>
+    
+    <button class="filter-btn" 
+            [class.active]="currentFilter === 'active'" 
+            (click)="applyFilter('active')">
+      Activas
+      @if(countActive > 0) { <span class="badge-count">{{countActive}}</span> }
+    </button>
+    
+    <button class="filter-btn" 
+            [class.active]="currentFilter === 'history'" 
+            (click)="applyFilter('history')">
+      Historial
+    </button>
+  </div>
+
+  @if (orders.length === 0) {
+    <div class="empty-state d-flex flex-column align-items-center justify-content-center py-5">
+      <div class="icon-circle mb-3">
+        <mat-icon>receipt_long</mat-icon>
+      </div>
+      <h3 class="text-dark fw-bold text-center">
+        {{ currentFilter === 'all' ? 'No tienes órdenes aún' : 'No hay órdenes en esta categoría' }}
+      </h3>
+      <p class="text-muted text-center">¡Es un buen momento para pedir tu hamburguesa favorita!</p>
+      
+      <button mat-flat-button color="primary" class="mt-3 btn-order" [routerLink]="['/client/menu']">
+        IR AL MENÚ
+      </button>
+    </div>
+  }
+
+  <div class="row g-4">
+    @for (order of orders; track order.idorder) {
+      <div class="col-12 col-md-6 col-lg-4 col-xl-3">
+        
+        <div class="card order-card h-100 border-0 shadow-sm">
+          <div class="card-body p-3 d-flex flex-column">
+            
+            <div class="d-flex justify-content-between align-items-start mb-3">
+              <div>
+                <div class="order-id text-dark fw-bold">
+                  <span class="text-muted">#</span>{{ order.idorder | slice:0:8 }}
+                </div>
+                <div class="order-date text-muted small d-flex align-items-center mt-1">
+                  <mat-icon class="tiny-icon me-1">calendar_today</mat-icon>
+                  {{ order.date | date:'d MMM, h:mm a' }}
+                </div>
+              </div>
+              
+              <div class="status-chip" [ngClass]="'status-' + order.status">
+                {{ getStatusText(order.status) }}
+              </div>
+            </div>
+
+            <mat-divider class="mb-3"></mat-divider>
+
+            <div class="flex-grow-1">
+              <div class="d-flex justify-content-between align-items-end">
+                <span class="text-muted small fw-bold text-uppercase">Total</span>
+                <span class="price-text">{{ order.total | currency }}</span>
+              </div>
+            </div>
+
+            @if (order.comments) {
+              <div class="comments-box mt-3">
+                <mat-icon class="tiny-icon me-2">comment</mat-icon>
+                <span class="text-truncate">{{ order.comments }}</span>
+              </div>
+            }
+
+          </div>
+          
+          <div class="status-bar" [ngClass]="'bar-' + order.status"></div>
+        </div>
+
+      </div>
+    }
+  </div>
+</div>

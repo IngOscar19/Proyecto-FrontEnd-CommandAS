@@ -1,1 +1,94 @@
-<p>sign-up works!</p>
+<section class="signup-page d-flex align-items-center justify-content-center min-vh-100 overflow-hidden">
+  
+  <div class="bg-shape shape-blue"></div>
+  <div class="bg-shape shape-orange"></div>
+
+  <div class="container position-relative z-2">
+    <div class="row justify-content-center">
+      <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+        
+        <div class="card signup-card border-0">
+          <div class="card-body p-4 p-md-5">
+            
+            <div class="text-center mb-4">
+              <h1 class="fw-bold text-primary-blue mb-1">Crear Cuenta</h1>
+              <p class="text-muted small">Únete a nosotros para realizar tus pedidos</p>
+            </div>
+
+            <form [formGroup]="signUpForm" (ngSubmit)="onSignUp()" class="d-flex flex-column gap-3">
+              
+              <mat-form-field appearance="outline" class="custom-field">
+                <mat-label>Nombre completo</mat-label>
+                <mat-icon matPrefix class="icon-orange">person</mat-icon>
+                <input matInput formControlName="name" placeholder="Ej: Juan Pérez" />
+                <mat-error *ngIf="signUpForm.get('name')?.hasError('required')">El nombre es requerido</mat-error>
+                <mat-error *ngIf="signUpForm.get('name')?.hasError('minlength')">Mínimo 3 caracteres</mat-error>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="custom-field">
+                <mat-label>Teléfono</mat-label>
+                <mat-icon matPrefix class="icon-orange">phone</mat-icon>
+                <input matInput formControlName="phone" placeholder="Ej: 4621234567" type="tel" />
+                <mat-error *ngIf="signUpForm.get('phone')?.hasError('required')">El teléfono es requerido</mat-error>
+                <mat-error *ngIf="signUpForm.get('phone')?.hasError('pattern')">Deben ser 10 dígitos</mat-error>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="custom-field">
+                <mat-label>Contraseña</mat-label>
+                <mat-icon matPrefix class="icon-orange">lock</mat-icon>
+                <input 
+                  matInput 
+                  formControlName="password" 
+                  [type]="hidePassword ? 'password' : 'text'" 
+                />
+                <button mat-icon-button matSuffix type="button" (click)="hidePassword = !hidePassword">
+                  <mat-icon class="text-muted">{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+                </button>
+                <mat-error *ngIf="signUpForm.get('password')?.hasError('required')">Requerida</mat-error>
+                <mat-error *ngIf="signUpForm.get('password')?.hasError('minlength')">Mínimo 6 caracteres</mat-error>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="custom-field">
+                <mat-label>Confirmar contraseña</mat-label>
+                <mat-icon matPrefix class="icon-orange">lock_reset</mat-icon>
+                <input 
+                  matInput 
+                  formControlName="confirmPassword" 
+                  [type]="hideConfirmPassword ? 'password' : 'text'" 
+                />
+                <button mat-icon-button matSuffix type="button" (click)="hideConfirmPassword = !hideConfirmPassword">
+                  <mat-icon class="text-muted">{{hideConfirmPassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+                </button>
+                <mat-error *ngIf="signUpForm.hasError('passwordMismatch')">Las contraseñas no coinciden</mat-error>
+              </mat-form-field>
+
+              <button 
+                mat-flat-button 
+                type="submit" 
+                class="btn-signup mt-3"
+                [disabled]="signUpForm.invalid || isLoading"
+              >
+                @if (isLoading) {
+                  <mat-spinner diameter="20" class="spinner-white"></mat-spinner>
+                  <span class="ms-2">Registrando...</span>
+                } @else {
+                  <span>Crear cuenta</span>
+                  <mat-icon class="icon-sm ms-2">arrow_forward</mat-icon>
+                }
+              </button>
+
+              <div class="text-center mt-3">
+                <p class="text-muted small">
+                  ¿Ya tienes cuenta? 
+                  <a [routerLink]="['/auth/sign-in']" class="link-blue fw-bold">Iniciar sesión</a>
+                </p>
+              </div>
+
+            </form>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>

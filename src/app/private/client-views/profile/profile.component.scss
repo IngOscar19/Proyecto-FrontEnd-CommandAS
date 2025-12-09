@@ -1,0 +1,112 @@
+// --- Variables ---
+$primary-blue: #0D47A1;
+$blue-light: #E3F2FD;
+$accent-orange: #FF6B35;
+$orange-hover: #E65100;
+$white: #ffffff;
+$bg-page: #F4F6F9;
+$text-dark: #2C3E50;
+
+.profile-page {
+    background-color: $bg-page;
+    min-height: 100vh;
+}
+
+// Utilidades de texto
+.text-primary-blue { color: $primary-blue; }
+.text-orange { color: $accent-orange; }
+
+// --- Tarjeta Principal ---
+.profile-card {
+    background: $white;
+    border-radius: 20px;
+    position: relative;
+    margin-top: 40px; // Espacio para el avatar flotante
+}
+
+// Fondo decorativo superior
+.card-header-bg {
+    height: 100px;
+    background: linear-gradient(135deg, $primary-blue, #1565C0);
+    position: relative;
+}
+
+// Avatar Flotante
+.avatar-wrapper {
+    width: 100px;
+    height: 100px;
+    background-color: $white;
+    border-radius: 50%;
+    border: 4px solid $white;
+    position: absolute;
+    bottom: -50px; // Mitad adentro, mitad afuera
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    .initial {
+        font-size: 40px;
+        font-weight: 800;
+        color: $accent-orange;
+    }
+}
+
+// --- Inputs Personalizados ---
+::ng-deep {
+    .custom-field {
+        .mat-icon.icon-orange {
+            color: $accent-orange;
+            margin-right: 8px;
+        }
+
+        .mdc-text-field--outlined {
+            background-color: #fafafa !important;
+            border-radius: 12px !important;
+
+            &.mdc-text-field--focused .mdc-notched-outline__leading,
+            &.mdc-text-field--focused .mdc-notched-outline__notch,
+            &.mdc-text-field--focused .mdc-notched-outline__trailing {
+                border-color: $primary-blue !important;
+                border-width: 2px;
+            }
+        }
+
+        .mdc-floating-label--float-above {
+            color: $primary-blue !important;
+            font-weight: 600;
+        }
+    }
+}
+
+// --- Botón Guardar ---
+.btn-save {
+    background-color: $accent-orange !important;
+    color: $white !important;
+    height: 48px;
+    padding: 0 32px;
+    border-radius: 25px !important;
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: 0.5px;
+    box-shadow: 0 4px 10px rgba($accent-orange, 0.3);
+    transition: all 0.2s;
+
+    &:hover:not(:disabled) {
+        background-color: $orange-hover !important;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 15px rgba($accent-orange, 0.4);
+    }
+
+    &:disabled {
+        background-color: #e0e0e0 !important;
+        color: #9e9e9e !important;
+        box-shadow: none;
+    }
+}
+
+// Spinner blanco
+::ng-deep .spinner-white circle {
+    stroke: $white !important;
+}

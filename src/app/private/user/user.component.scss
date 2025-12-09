@@ -1,0 +1,139 @@
+// Variables
+$primary-blue: #0D47A1;
+$accent-orange: #FF6B35;
+$orange-hover: #E65100;
+$white: #ffffff;
+$bg-light: #F4F6F9;
+$text-dark: #2C3E50;
+
+.user-page {
+    min-height: 85vh;
+    background-color: transparent; 
+}
+
+// Tarjeta
+.user-card {
+    background: $white;
+    border-radius: 16px;
+    overflow: hidden;
+    animation: fadeScale 0.4s ease-out;
+
+    .icon-header { color: $primary-blue; }
+    .text-primary-blue { color: $primary-blue; }
+}
+
+@keyframes fadeScale {
+    from { opacity: 0; transform: scale(0.98); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+// Inputs Personalizados
+::ng-deep {
+    .custom-field {
+        .mat-icon.icon-orange {
+            color: $accent-orange;
+            margin-right: 8px;
+        }
+
+        .mdc-text-field--outlined {
+            background-color: #fafafa !important; 
+            border-radius: 10px !important;
+
+            &.mdc-text-field--focused .mdc-notched-outline__leading,
+            &.mdc-text-field--focused .mdc-notched-outline__notch,
+            &.mdc-text-field--focused .mdc-notched-outline__trailing {
+                border-color: $primary-blue !important;
+                border-width: 2px;
+            }
+        }
+
+        .mdc-floating-label--float-above {
+            color: $primary-blue !important;
+            font-weight: 600;
+        }
+        
+        .text-info-dark {
+            color: #1976D2;
+            display: flex;
+            align-items: center;
+        }
+    }
+}
+
+// --- ESTILOS DE BOTONES CORREGIDOS ---
+
+.action-buttons {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+// 1. Botón GUARDAR (Naranja Sólido)
+button.btn-save {
+    // Forzamos el color naranja
+    background-color: #FF6B35 !important; 
+    color: #ffffff !important;
+    
+    height: 48px !important;
+    padding: 0 32px !important;
+    border-radius: 8px !important;
+    border: none !important;
+    
+    font-weight: 700 !important;
+    letter-spacing: 0.5px;
+    font-size: 14px;
+    
+    // Centrar contenido
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    box-shadow: 0 4px 12px rgba(255, 107, 53, 0.3);
+    transition: all 0.2s ease-in-out;
+
+    // Hover
+    &:hover:not(:disabled) {
+        background-color: #E65100 !important; // Naranja oscuro
+        transform: translateY(-1px);
+        box-shadow: 0 6px 15px rgba(255, 107, 53, 0.4);
+    }
+
+    // Deshabilitado (Gris)
+    &:disabled {
+        background-color: #e0e0e0 !important;
+        color: #9e9e9e !important;
+        box-shadow: none !important;
+        transform: none !important;
+        cursor: not-allowed;
+    }
+}
+
+// 2. Botón ELIMINAR (Borde Rojo)
+button.btn-delete {
+    height: 48px !important;
+    padding: 0 24px !important;
+    border: 1px solid #ffcdd2 !important;
+    color: #d32f2f !important;
+    background: transparent !important;
+    font-weight: 600;
+    
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+
+    ::ng-deep mat-icon { 
+        color: #d32f2f !important; 
+        margin: 0 !important;
+    }
+
+    &:hover {
+        background-color: #ffebee !important;
+        border-color: #d32f2f !important;
+    }
+}
+
+// Spinner blanco dentro del botón
+::ng-deep .spinner-white circle {
+    stroke: #ffffff !important;
+}

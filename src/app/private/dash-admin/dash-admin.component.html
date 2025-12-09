@@ -1,16 +1,78 @@
-<mat-card appearance="outlined">
-    <mat-card-header>
-      <mat-card-title>Ventas totales</mat-card-title>
-      <mat-card-subtitle>{{total.total}}</mat-card-subtitle>
-    </mat-card-header>
-    <mat-card-header>
-        <mat-card-title>Promedio tiempo de realizacion</mat-card-title>
-        <mat-card-subtitle>{{avg.minutos}} minutos</mat-card-subtitle>
-      </mat-card-header>
-  </mat-card>  
-<h2>Ventas del mes</h2>
-<canvas baseChart [data]="dataSales" [type]="'bar'" #chartSales></canvas>
-<h2>Mejores clientes</h2>
-<canvas baseChart [data]="dataClient" [type]="'bar'"></canvas>
-<h2>Productos más vendidos</h2>
-<canvas baseChart [data]="dataProduct" [type]="'bar'"></canvas>
+<div class="dashboard-page container-fluid p-4">
+    
+    <div class="mb-4">
+        <h1 class="text-primary-blue fw-bold m-0 d-flex align-items-center">
+            <mat-icon class="me-2 icon-title">dashboard</mat-icon>
+            Dashboard
+        </h1>
+        <p class="text-muted small m-0 ps-1">Resumen de rendimiento y métricas clave</p>
+    </div>
+
+    <div class="row g-4 mb-4">
+        
+        <div class="col-12 col-md-6">
+            <div class="stat-card bg-white shadow-sm d-flex align-items-center p-4 rounded-4">
+                <div class="icon-wrapper bg-blue-light text-primary-blue me-3">
+                    <mat-icon>payments</mat-icon>
+                </div>
+                <div>
+                    <p class="text-muted small fw-bold text-uppercase mb-1">Ventas Totales</p>
+                    <h2 class="m-0 fw-bold text-dark">{{ total?.total | currency }}</h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-md-6">
+            <div class="stat-card bg-white shadow-sm d-flex align-items-center p-4 rounded-4">
+                <div class="icon-wrapper bg-orange-light text-orange me-3">
+                    <mat-icon>timer</mat-icon>
+                </div>
+                <div>
+                    <p class="text-muted small fw-bold text-uppercase mb-1">Tiempo Promedio</p>
+                    <h2 class="m-0 fw-bold text-dark">
+                        {{ avg?.minutos | number:'1.0-0' }} <span class="fs-6 text-muted fw-normal">minutos</span>
+                    </h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        
+        <div class="col-12 col-lg-8">
+            <div class="chart-card bg-white shadow-sm p-4 rounded-4 h-100">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h3 class="fw-bold text-primary-blue m-0">Ventas del Mes</h3>
+                    <mat-icon class="text-muted opacity-25">bar_chart</mat-icon>
+                </div>
+                <div class="chart-container">
+                    <canvas baseChart [data]="dataSales" [type]="'bar'" [options]="barChartOptions" #chartSales></canvas>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-12 col-lg-4">
+            <div class="chart-card bg-white shadow-sm p-4 rounded-4 h-100">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h3 class="fw-bold text-primary-blue m-0">Top Productos</h3>
+                    <mat-icon class="text-muted opacity-25">pie_chart</mat-icon>
+                </div>
+                <div class="chart-container pie-container">
+                    <canvas baseChart [data]="dataProduct" [type]="'pie'" [options]="pieChartOptions"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12">
+            <div class="chart-card bg-white shadow-sm p-4 rounded-4">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h3 class="fw-bold text-primary-blue m-0">Clientes Frecuentes</h3>
+                    <mat-icon class="text-muted opacity-25">group</mat-icon>
+                </div>
+                <div class="chart-container">
+                    <canvas baseChart [data]="dataClient" [type]="'bar'" [options]="barChartOptions"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

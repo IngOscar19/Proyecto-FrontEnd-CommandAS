@@ -1,0 +1,69 @@
+// --- Variables ---
+$primary-blue: #0D47A1;
+$blue-light: #E3F2FD;
+$accent-orange: #FF6B35;
+$orange-light: #FFCCBC;
+$bg-page: #F4F6F9;
+$text-dark: #2C3E50;
+
+.dashboard-page {
+    background-color: $bg-page;
+    min-height: 100vh;
+}
+
+// Utilidades de Texto
+.text-primary-blue { color: $primary-blue; }
+.text-orange { color: $accent-orange; }
+.icon-title { color: $accent-orange; } // Icono del título principal
+
+// --- Stats Cards (Tarjetas Superiores) ---
+.stat-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 1px solid rgba(0,0,0,0.02);
+
+    &:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.05) !important;
+    }
+
+    .icon-wrapper {
+        width: 60px;
+        height: 60px;
+        border-radius: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        mat-icon {
+            font-size: 30px;
+            width: 30px;
+            height: 30px;
+        }
+    }
+
+    // Colores de fondo para iconos
+    .bg-blue-light { background-color: $blue-light; }
+    .bg-orange-light { background-color: rgba($accent-orange, 0.15); }
+}
+
+// --- Chart Cards ---
+.chart-card {
+    border: 1px solid rgba(0,0,0,0.02);
+    display: flex;
+    flex-direction: column;
+}
+
+.chart-container {
+    position: relative;
+    width: 100%;
+    // Altura mínima para asegurar que se vea bien
+    min-height: 300px;
+    flex-grow: 1; 
+}
+
+.pie-container {
+    // Las gráficas de pastel a veces necesitan un ajuste de altura diferente
+    min-height: 250px;
+    display: flex;
+    justify-content: center;
+}

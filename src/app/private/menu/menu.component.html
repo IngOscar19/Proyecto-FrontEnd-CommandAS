@@ -1,138 +1,284 @@
-<form [formGroup]="_order.formOrder" class="container float-container">
-    <mat-sidenav-container hasBackdrop="false">
-        <mat-sidenav #barraComentarios position="end" mode="push" class="nav">
-            <div formArrayName="order_details">
-                @for (product of orderDetailsArray().controls; track product; let productindex = $index) {
-                <h2>{{filterByProduct(product.value.products_idproducts)?.name}} {{product.value.amount}}</h2>
-                @if (filterByIngredient('required', 0, filterByProduct(product.value.products_idproducts)?.ingredients,
-                product.value.products_idproducts, product.value.amount)?.length){
-                <div class="ingredientsContainer">
-                    <div>
-                        <mat-label>
-                            Excepciones
-                        </mat-label>
+<form [formGroup]="order.formOrder" class="container-fluid p-0 wrapper">
+  
+  <mat-sidenav-container class="sidenav-container" [hasBackdrop]="true">
+
+    <mat-sidenav #barraComentarios position="end" mode="over" class="cart-sidenav">
+      
+      <div class="cart-header">
+        <h3><mat-icon>shopping_cart</mat-icon> Tu Pedido</h3>
+      </div>
+
+      <div class="cart-content" formArrayName="order_details">
+        
+        <div *ngIf="orderEmpty" class="text-center py-5 text-muted">
+          <mat-icon style="font-size: 48px; width: 48px; height: 48px; opacity: 0.5;">fastfood</mat-icon>
+          <p class="mt-2">Tu carrito está vacío</p>
+        </div>
+
+        <div
+          *ngFor="let product of orderDetailsArray.controls; let productindex = index"
+          [formGroupName]="productindex"
+          class="cart-item card border-0 shadow-sm mb-3"
+        >
+          <div class="card-body p-3">
+            
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <h4 class="m-0 fw-bold text-primary-blue" style="font-size: 1rem;">
+                {{ filterByProduct(product.value.products_idproducts)?.name }}
+                <span class="badge bg-orange rounded-pill ms-2">x{{ product.value.amount }}</span>
+              </h4>
+              <button mat-icon-button color="warn" class="btn-remove-mini" (click)="removeProduct(product.value.products_idproducts)">
+                <mat-icon>delete_outline</mat-icon>
+              </button>
+            </div>
+
+            <div class="mb-2">
+               <mat-radio-group formControlName="order_type" color="primary" class="d-flex gap-3">
+                  <mat-radio-button [value]="1" class="small-radio">Aquí</mat-radio-button>
+                  <mat-radio-button [value]="0" class="small-radio">Llevar</mat-radio-button>
+               </mat-radio-group>
+            </div>
+
+            <div class="ingredients-section bg-light p-2 rounded mb-2" *ngIf="filterByProduct(product.value.products_idproducts)?.ingredients?.length">
+              
+              <div *ngIf="filterByIngredient('base', filterByProduct(product.value.products_idproducts)?.ingredients)?.length" class="mb-2">
+                <h6 class="text-muted small fw-bold mb-1">Ingredientes:</h6>
+                <div class="d-flex flex-wrap gap-2">
+                  <div
+                    *ngFor="let ing of filterByIngredient('base', filterByProduct(product.value.products_idproducts)?.ingredients)"
+                    class="ingredient-chip"
+                    [class.removed]="ingredientsSelected(productindex, 0, ing.name).includes(ing.name)"
+                  >
+                    <img [src]="getIngredientImage(ing.name)" class="ingredient-thumb me-1">
+                    <mat-checkbox
+                      [checked]="!ingredientsSelected(productindex, 0, ing.name).includes(ing.name)"
+                      (change)="addIngredient(product.value.products_idproducts, ing.idingredients, 0, !$event.checked, product.value.amount, ing.name, ing.extra)"
+                      color="primary"
+                      class="small-checkbox"
+                    >
+                      {{ ing.name }}
+                    </mat-checkbox>
+                  </div>
+                </div>
+              </div>
+
+              <div *ngIf="filterByIngredient('extra', filterByProduct(product.value.products_idproducts)?.ingredients)?.length">
+                <h6 class="text-muted small fw-bold mt-2 mb-1">Extras:</h6>
+                <div *ngFor="let ing of filterByIngredient('extra', filterByProduct(product.value.products_idproducts)?.ingredients)" class="d-flex align-items-center mb-1">
+                    <img [src]="getIngredientImage(ing.name)" class="ingredient-thumb me-2">
+                    <mat-checkbox
+                      [checked]="ingredientsSelected(productindex, 1, ing.name).includes(ing.name)"
+                      (change)="addIngredient(product.value.products_idproducts, ing.idingredients, 1, $event.checked, product.value.amount, ing.name, ing.extra)"
+                      color="warn" 
+                      class="small-checkbox"
+                    >
+                      {{ ing.name }} 
+                      <span class="text-orange fw-bold ms-1" style="font-size: 0.75rem;">(+{{ ing.extra | currency }})</span>
+                    </mat-checkbox>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <div class="cart-footer bg-white shadow-lg p-3">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <span class="fs-5 text-muted">Total:</span>
+          <span class="fs-3 fw-bold text-primary-blue">{{ calculateTotal() | currency }}</span>
+        </div>
+        
+        <mat-form-field appearance="outline" class="w-100 mb-1 dense-field">
+          <mat-label>Nombre del cliente</mat-label>
+          <input matInput formControlName="client" required />
+          <mat-icon matPrefix>person</mat-icon>
+          <mat-error>Requerido</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="w-100 mb-2 dense-field">
+          <mat-label>Comentarios generales</mat-label>
+          <textarea rows="1" matInput formControlName="comments" placeholder="Ej: Alérgico al maní..."></textarea>
+        </mat-form-field>
+
+        <button mat-flat-button class="w-100 btn-confirm py-2" (click)="sendOrder()" [disabled]="orderEmpty">
+          CONFIRMAR ORDEN <mat-icon class="ms-2">check_circle</mat-icon>
+        </button>
+      </div>
+    </mat-sidenav>
+
+
+    <mat-sidenav-content class="menu-content">
+      <div class="container py-5">
+        
+        <div class="text-center mb-5">
+            <h1 class="display-5 fw-bold text-primary-blue">Nuestro Menú</h1>
+            <p class="text-muted lead">Calidad y sabor en cada bocado</p>
+        </div>
+
+        <div class="section-header text-center mb-4">
+          <h2 class="text-primary-blue fw-bold">Hamburguesas Clásicas</h2>
+          <p class="text-muted mb-0">Incluyen papas a la francesa</p>
+        </div>
+
+        <div class="row g-4 mb-5 justify-content-center">
+            <div *ngFor="let product of classicBurgers; trackBy: trackByFn" class="col-12 col-md-6 col-lg-4 col-xl-3">
+                <div class="card h-100 product-card shadow-sm border-0">
+                    
+                    <button type="button" mat-icon-button class="fav-btn shadow-sm" 
+                            *ngIf="isClient()" 
+                            (click)="toggleFavorite(product); $event.stopPropagation()">
+                        <mat-icon [class.is-fav]="isFavorite(product.idproducts)">
+                            {{ isFavorite(product.idproducts) ? 'favorite' : 'favorite_border' }}
+                        </mat-icon>
+                    </button>
+
+                    <div class="card-img-wrapper pt-3 px-3 text-center">
+                        <img [src]="getProductImage(product.name)" [alt]="product.name" class="img-fluid product-img mx-auto d-block">
                     </div>
-                    <div class="container-exceptions">
-                        @for (ingredient of filterByIngredient('required', 0,
-                        filterByProduct(product.value.products_idproducts)?.ingredients,
-                        product.value.products_idproducts,
-                        product.value.amount); track $index) {
-                        <mat-checkbox #options [checked]="ingredientsSelected(productindex, 0, ingredient.name)"
-                            (click)="addIngredient(product.value.products_idproducts, ingredient.idingredients, 0, options.checked, product.value.amount, ingredient.name, 0)">
-                            <div class="exceptions-container">
-                                <img class="exceptions" src="../../../assets/{{ingredient.name}}.png">
-                                <span class="text-xs">{{ingredient.name}}</span>
+
+                    <div class="card-body d-flex flex-column align-items-center text-center w-100">
+                        <h5 class="card-title fw-bold text-primary-dark mb-2">{{ product.name }}</h5>
+                        
+                        <div class="ingredients-pills mb-2 d-flex justify-content-center flex-wrap" *ngIf="product.ingredients?.length">
+                            <span class="badge bg-light text-dark border me-1 mb-1" *ngFor="let ing of product.ingredients | slice:0:3">{{ing.name}}</span>
+                            <span class="badge bg-light text-muted" *ngIf="product.ingredients.length > 3">+{{product.ingredients.length - 3}}</span>
+                        </div>
+
+                        <p class="card-text text-muted small mb-3 flex-grow-1">{{ product.description }}</p>
+                        
+                        <div class="mt-auto w-100 d-flex flex-column align-items-center">
+                            <div class="price-tag mb-2">{{ product.price | currency }}</div>
+                            
+                            <div class="qty-control mx-auto" [class.active]="amount(product.idproducts) > 0">
+                                <button type="button" class="qty-btn remove" 
+                                        (click)="removeProduct(product.idproducts); $event.stopPropagation()">
+                                    <mat-icon>remove</mat-icon>
+                                </button>
+                                <span class="qty-number">{{ amount(product.idproducts) || 0 }}</span>
+                                <button type="button" class="qty-btn add" 
+                                        (click)="addProduct(product.idproducts, product.price, product.name, product.name_category); $event.stopPropagation()">
+                                    <mat-icon>add</mat-icon>
+                                </button>
                             </div>
-                        </mat-checkbox>
-                        }
+                        </div>
                     </div>
                 </div>
-                <br>
-                }
+            </div>
+        </div>
 
-                @if (filterByIngredient('extra', 1, filterByProduct(product.value.products_idproducts)?.ingredients,
-                product.value.products_idproducts, product.value.amount)?.length){
-                <div class="ingredientsContainer">
-                    <mat-label>
-                        Extras
-                    </mat-label>
-                    <br>
-                    <div class="container-exceptions">
-                        @for (ingredient of filterByIngredient('extra', 1,
-                        filterByProduct(product.value.products_idproducts)?.ingredients,
-                        product.value.products_idproducts,
-                        product.value.amount); track ingredient;let indexingredient = $index) {
-                        <mat-checkbox #optionsExtra [checked]="ingredientsSelected(productindex, 1, ingredient.name)"
-                            (click)="addIngredient(product.value.products_idproducts, ingredient.idingredients, 1, optionsExtra.checked, product.value.amount, ingredient.name, ingredient.cost)">
-                            <div class="extras-container">
-                                <img class="extras" #imagen src="../../../assets/{{ingredient.name}}.png">
-                                <span class="text-xs">{{ingredient.name}}</span>
-                                <span class="text-xs">{{ingredient.cost | currency}}</span>
+        <div class="section-header text-center mb-4 mt-5">
+            <h2 class="text-primary-blue fw-bold">Hamburguesas Premium</h2>
+        </div>
+        
+        <div class="row g-4 mb-5 justify-content-center">
+             <div *ngFor="let product of premiumBurgers; trackBy: trackByFn" class="col-12 col-md-6 col-lg-4 col-xl-3">
+                 <div class="card h-100 product-card shadow-sm border-0">
+                    
+                    <button type="button" mat-icon-button class="fav-btn shadow-sm" 
+                            *ngIf="isClient()" 
+                            (click)="toggleFavorite(product); $event.stopPropagation()">
+                        <mat-icon [class.is-fav]="isFavorite(product.idproducts)">{{ isFavorite(product.idproducts) ? 'favorite' : 'favorite_border' }}</mat-icon>
+                    </button>
+
+                    <div class="card-img-wrapper pt-3 px-3 text-center">
+                        <img [src]="getProductImage(product.name)" [alt]="product.name" class="img-fluid product-img mx-auto d-block">
+                    </div>
+                    
+                    <div class="card-body d-flex flex-column align-items-center text-center w-100">
+                        <h5 class="card-title fw-bold text-primary-dark mb-2">{{ product.name }}</h5>
+                        <p class="card-text text-muted small mb-3 flex-grow-1">{{ product.description }}</p>
+                        
+                        <div class="mt-auto w-100 d-flex flex-column align-items-center">
+                            <div class="price-tag mb-2">{{ product.price | currency }}</div>
+                            
+                            <div class="qty-control mx-auto" [class.active]="amount(product.idproducts) > 0">
+                                <button type="button" class="qty-btn remove" (click)="removeProduct(product.idproducts); $event.stopPropagation()">
+                                    <mat-icon>remove</mat-icon>
+                                </button>
+                                <span class="qty-number">{{ amount(product.idproducts) || 0 }}</span>
+                                <button type="button" class="qty-btn add" (click)="addProduct(product.idproducts, product.price, product.name, product.name_category); $event.stopPropagation()">
+                                    <mat-icon>add</mat-icon>
+                                </button>
                             </div>
-                        </mat-checkbox>
-                        }
+                        </div>
                     </div>
-                </div>
-                <br>
-                }
+                 </div>
+             </div>
+        </div>
 
-                <div class="comments" [formGroupName]="productindex">
-                    <textarea rows="5" placeholder="Comentarios" formControlName="comments"></textarea>
-                </div>
-                }
-            </div>
+        <div class="row">
+            <div class="col-12 col-lg-6 mb-4">
+                <h3 class="text-primary-blue fw-bold mb-3 text-center text-lg-start">
+                    <mat-icon class="me-2 text-orange align-bottom">tapas</mat-icon>Snacks
+                </h3>
+                <div class="d-flex flex-column gap-3">
+                    <div *ngFor="let product of snacks; trackBy: trackByFn" class="card product-card-horizontal border-0 shadow-sm">
+                        
+                        <img [src]="getProductImage(product.name)" #imgSnack (error)="imgSnack.src = 'assets/Snack.png'" class="horizontal-img">
+                        
+                        <div class="info-container">
+                            <div class="d-flex justify-content-between align-items-center mb-1">
+                                <h6 class="fw-bold m-0 text-primary-dark">{{ product.name }}</h6>
+                                <span class="text-orange fw-bold">{{ product.price | currency }}</span>
+                            </div>
+                            <p class="small text-muted m-0 lh-sm">{{product.description}}</p>
+                        </div>
 
-        </mat-sidenav>
-        <mat-sidenav-content [ngStyle]="{padding: '2% 5%'}">
-            <div>
-                <div class="food-container">
-                    <div class="title">
-                        <h2>Hamburguesas</h2>
-                        <h3>Todas las hamburguesas contienen jamon, queso, tocino, jitomate, cebolla, aguacate, lechuga,
-                            mayonesa y mostaza</h3>
-                        <h3>Acompañado de papas a la francesa</h3>
-                    </div>
-                    @for (product of filterByCategory('da99cc44-03a0-457a-8711-4660c3b5b45b'); track $index) {
-                    <div class="hamburger">
-                        <img src="../../../assets/Hamburguesa.png">
-                        <h4>{{product.name}}</h4>
-                        <h5>{{product.description}}</h5>
-                        <mat-form-field appearance="outline" [ngClass]="amount(product.idproducts)>0?'count':''">
-                            <mat-icon (click)="removeProduct(product.idproducts)" matPrefix>remove</mat-icon>
-                            <input type="number" matInput [value]="amount(product.idproducts)">
-                            <mat-icon
-                                (click)="addProduct(product.idproducts,product.price, product.name, product.name_category)"
-                                matSuffix>add</mat-icon>
-                        </mat-form-field>
-                    </div>
-                    }
-                    <div class="exceptions">
-
+                        <div class="d-flex align-items-center gap-1 ms-2">
+                            <button mat-icon-button class="tiny-btn text-muted" (click)="removeProduct(product.idproducts)" *ngIf="amount(product.idproducts) > 0">
+                                <mat-icon>remove_circle_outline</mat-icon>
+                            </button>
+                            <span class="fw-bold px-1" *ngIf="amount(product.idproducts) > 0">{{ amount(product.idproducts) }}</span>
+                            <button mat-icon-button class="tiny-btn text-primary" (click)="addProduct(product.idproducts, product.price, product.name, product.name_category)">
+                                <mat-icon>add_circle</mat-icon>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="wing-container">
-                <div class="title">
-                    <h2>Alitas</h2>
-                    <h3>La orden de alitas contiene 5 piezas</h3>
-                </div>
-                @for (product of filterByCategory('64afaea8-be6c-49ae-8e99-32132dd89630'); track $index) {
-                <div class="wings">
-                    <img src="../../../assets/Alitas.png">
-                    <h4>{{product.name}}</h4>
-                    <h5>{{product.description}}</h5>
-                    <mat-form-field appearance="outline">
-                        <mat-icon (click)="removeProduct(product.idproducts)" matPrefix>remove</mat-icon>
-                        <input type="number" matInput [value]="amount(product.idproducts)">
-                        <mat-icon
-                            (click)="addProduct(product.idproducts,product.price, product.name, product.name_category)"
-                            matSuffix>add</mat-icon>
-                    </mat-form-field>
-                </div>
-                }
-            </div>
-            <div class="snacks-container">
-                <div class="title">
-                    <h2>Snacks</h2>
-                </div>
-                @for (product of filterByCategory('4716bb4e-0793-4c76-9b48-3dd8e7a9ba9a'); track $index) {
-                <div class="snacks">
-                    <img src="../../../assets/{{product.name}}.png" #img (error)="img.src='../../../assets/Snack.png'">
-                    <h4>{{product.name}}</h4>
-                    <h5>{{product.description}}</h5>
-                    <mat-form-field appearance="outline">
-                        <mat-icon (click)="removeProduct(product.idproducts)" matPrefix>remove</mat-icon>
-                        <input type="number" matInput [value]="amount(product.idproducts)">
-                        <mat-icon
-                            (click)="addProduct(product.idproducts,product.price, product.name, product.name_category)"
-                            matSuffix>add</mat-icon>
-                    </mat-form-field>
-                </div>
-                }
-            </div>
-        </mat-sidenav-content>
 
-    </mat-sidenav-container>
-    <div class="float"><button class="button-primary" [routerLink]="['/private/order-view']"
-            routerLinkActive="router-link-active">Siguiente</button></div>
+            <div class="col-12 col-lg-6 mb-4">
+                <h3 class="text-primary-blue fw-bold mb-3 text-center text-lg-start">
+                    <mat-icon class="me-2 text-orange align-bottom">local_bar</mat-icon>Bebidas
+                </h3>
+                <div class="d-flex flex-column gap-3">
+                    <div *ngFor="let product of drinks; trackBy: trackByFn" class="card product-card-horizontal border-0 shadow-sm">
+                        
+                        <img [src]="getProductImage(product.name)" #imgDrink (error)="imgDrink.src = 'assets/Refresco.png'" class="horizontal-img">
+                        
+                        <div class="info-container">
+                             <div class="d-flex justify-content-between align-items-center mb-1">
+                                <h6 class="fw-bold m-0 text-primary-dark">{{ product.name }}</h6>
+                                <span class="text-orange fw-bold">{{ product.price | currency }}</span>
+                            </div>
+                        </div>
+                        
+                        <div class="d-flex align-items-center gap-1 ms-2">
+                            <button mat-icon-button class="tiny-btn text-muted" (click)="removeProduct(product.idproducts)" *ngIf="amount(product.idproducts) > 0">
+                                <mat-icon>remove_circle_outline</mat-icon>
+                            </button>
+                            <span class="fw-bold px-1" *ngIf="amount(product.idproducts) > 0">{{ amount(product.idproducts) }}</span>
+                            <button mat-icon-button class="tiny-btn text-primary" (click)="addProduct(product.idproducts, product.price, product.name, product.name_category)">
+                                <mat-icon>add_circle</mat-icon>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+      </div>
+
+      <div class="float-btn-wrapper" *ngIf="!orderEmpty">
+        <button mat-fab class="bg-orange text-white" (click)="barraComentarios.toggle()">
+          <mat-icon>shopping_cart</mat-icon>
+          <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary border border-light">
+            {{ orderDetailsArray.length }}
+          </span>
+        </button>
+      </div>
+
+    </mat-sidenav-content>
+  </mat-sidenav-container>
 </form>

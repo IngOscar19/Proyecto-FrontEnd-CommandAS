@@ -1,20 +1,118 @@
-section{
-    padding: 2% 10%;
-    .button-primary{
-        margin: auto;
+// --- Variables ---
+$primary-blue: #0D47A1;
+$light-blue-bg: #E3F2FD;
+$accent-orange: #FF6B35;
+$text-dark: #2C3E50;
+$white: #ffffff;
+$bg-page: #f5f7fa;
+
+.chef-page {
+    background-color: $bg-page;
+    min-height: 100vh;
+}
+
+// Utilidades de texto
+.text-primary-blue { color: $primary-blue; }
+.text-orange { color: $accent-orange; }
+
+// --- Tabla Moderna ---
+.table-wrapper {
+    border: 1px solid rgba(0,0,0,0.05);
+}
+
+.modern-table {
+    width: 100%;
+
+    // Cabecera Azul
+    th.mat-mdc-header-cell {
+        background-color: $primary-blue;
+        color: $white;
+        font-size: 1rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        padding: 18px 24px;
+    }
+
+    // Celdas
+    td.mat-mdc-cell {
+        padding: 16px 24px;
+        font-size: 1rem;
+        border-bottom-color: rgba(0,0,0,0.05);
+        color: $text-dark;
+    }
+
+    // Efecto Hover en filas
+    tr.element-row {
+        transition: background-color 0.2s ease;
+        cursor: pointer;
+        
+        &:hover {
+            background-color: $light-blue-bg;
+        }
     }
 }
-.order-container{
+
+// --- Avatar del Cliente ---
+.avatar-circle {
+    width: 40px;
+    height: 40px;
+    background-color: rgba($primary-blue, 0.1);
+    color: $primary-blue;
+    border-radius: 50%;
     display: flex;
-    flex-direction: column;
-    gap: 16px;
-    .order{
-        display: flex;
-        flex-direction: column;
-        align-items: flex-end;
-        text-align: end;
-        h4{
-            font-weight: 500;
-        }
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 18px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+// --- Icono pequeño para notas ---
+.icon-small {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+    vertical-align: middle;
+}
+
+// --- Botón de Acción (Cocinar) ---
+.btn-cook {
+    background-color: $accent-orange !important; // Naranja Acción
+    color: $white !important;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    padding: 0 24px;
+    height: 42px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba($accent-orange, 0.3);
+    transition: all 0.2s;
+
+    &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 12px rgba($accent-orange, 0.4);
+        background-color: darken($accent-orange, 5%) !important;
+    }
+
+    &:active {
+        transform: translateY(0);
+    }
+
+    mat-icon {
+        margin-right: 8px;
+    }
+}
+
+// Responsive
+@media (max-width: 768px) {
+    th.mat-mdc-header-cell, td.mat-mdc-cell {
+        padding: 12px;
+    }
+    
+    .btn-cook {
+        padding: 0 16px;
+        
+        span { display: none; } // En celular solo muestra el icono
+        mat-icon { margin: 0; }
     }
 }

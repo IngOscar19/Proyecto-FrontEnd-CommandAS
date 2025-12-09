@@ -1,0 +1,151 @@
+// --- Variables de Color (Mismas que Login) ---
+$blue-primary: #0D47A1;
+$blue-dark: #1565C0;
+$orange-primary: #FF6B35;
+$orange-hover: #F4511E;
+$white: #ffffff;
+$gray-bg: #F4F6F9;
+
+// --- Estilos Generales ---
+.signup-page {
+    background-color: $gray-bg;
+    position: relative;
+    // Fondo sutil mezclado
+    background: radial-gradient(circle at top left, rgba($blue-primary, 0.05), transparent 70%),
+                radial-gradient(circle at bottom right, rgba($orange-primary, 0.05), transparent 70%);
+}
+
+// --- Animación de Fondo (Burbujas) ---
+.bg-shape {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    z-index: 1;
+    opacity: 0.5;
+    animation: float-bg 20s infinite alternate ease-in-out;
+}
+
+.shape-blue {
+    top: -10%;
+    left: -10%;
+    width: 400px;
+    height: 400px;
+    background: rgba($blue-primary, 0.15);
+}
+
+.shape-orange {
+    bottom: -10%;
+    right: -10%;
+    width: 350px;
+    height: 350px;
+    background: rgba($orange-primary, 0.15);
+    animation-delay: -5s;
+}
+
+@keyframes float-bg {
+    0% { transform: translate(0, 0) rotate(0deg); }
+    100% { transform: translate(40px, 60px) rotate(15deg); }
+}
+
+// --- Tarjeta de Registro ---
+.signup-card {
+    background: rgba($white, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 24px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
+    transition: transform 0.3s ease;
+    animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+
+    &:hover {
+        transform: translateY(-5px);
+    }
+}
+
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(40px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.text-primary-blue {
+    color: $blue-primary;
+}
+
+// --- Inputs Personalizados ---
+::ng-deep {
+    .custom-field {
+        width: 100%;
+        
+        // Iconos naranjas para dar vida
+        .mat-icon.icon-orange {
+            color: $orange-primary;
+            margin-right: 8px;
+        }
+
+        .mdc-text-field--outlined {
+            background-color: $white !important;
+            border-radius: 12px !important;
+            
+            // Bordes
+            &.mdc-text-field--focused .mdc-notched-outline__leading,
+            &.mdc-text-field--focused .mdc-notched-outline__notch,
+            &.mdc-text-field--focused .mdc-notched-outline__trailing {
+                border-color: $blue-primary !important;
+                border-width: 2px;
+            }
+        }
+        
+        // Label flotante
+        .mdc-floating-label--float-above {
+            color: $blue-primary !important;
+            font-weight: 600;
+        }
+    }
+}
+
+// --- Botón de Registro ---
+.btn-signup {
+    height: 52px;
+    border-radius: 12px !important;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    color: $white !important;
+    background-color: $orange-primary !important; // Naranja vibrante
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba($orange-primary, 0.3);
+
+    &:hover:not(:disabled) {
+        background-color: $orange-hover !important;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba($orange-primary, 0.4);
+    }
+
+    &:disabled {
+        background-color: #ccc !important;
+        box-shadow: none;
+    }
+
+    .icon-sm {
+        font-size: 18px;
+        width: 18px;
+        height: 18px;
+        vertical-align: middle;
+    }
+}
+
+// Spinner blanco dentro del botón
+::ng-deep .spinner-white circle {
+    stroke: $white !important;
+}
+
+// --- Link de volver ---
+.link-blue {
+    color: $blue-primary;
+    text-decoration: none;
+    transition: color 0.2s;
+
+    &:hover {
+        color: $orange-primary; // Cambio a naranja al hover
+        text-decoration: underline;
+    }
+}

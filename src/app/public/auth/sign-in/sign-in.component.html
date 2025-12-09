@@ -1,16 +1,67 @@
-<section>
-    <img src="assets/logo.png" alt="" />
-    <form class="form" [formGroup]="form_signin" (ngSubmit)="signin()">
-        <mat-form-field appearance="outline">
-            <mat-label>Nombre</mat-label><input type="text" matInput formControlName="name"/><mat-icon matPrefix>person</mat-icon>
-            <mat-error>Ingresa un valor válido</mat-error>
-        </mat-form-field>
-        <mat-form-field appearance="outline">
-            <mat-label>Contraseña</mat-label><input type="text" matInput formControlName="password" type="password" /><mat-icon
-                matPrefix>password</mat-icon><mat-error></mat-error>
-        </mat-form-field>
-        <button type="submit" class="button-primary">Entrar</button>
-        
-    </form>
+<section class="login-page d-flex align-items-center justify-content-center min-vh-100 overflow-hidden">
     
+    <div class="bg-shape shape-blue"></div>
+    <div class="bg-shape shape-orange"></div>
+
+    <div class="container position-relative z-2">
+        <div class="row justify-content-center">
+            <div class="col-12 col-sm-10 col-md-8 col-lg-5 col-xl-4">
+                
+                <div class="card login-card border-0">
+                    <div class="card-body p-4 p-md-5">
+                        
+                        <div class="text-center mb-4">
+                            <div class="logo-wrapper mx-auto mb-3">
+                                <img src="assets/logo.png" alt="Logo" class="img-fluid" />
+                            </div>
+                            <h2 class="fw-bold text-dark-blue mb-1">¡Hola de nuevo!</h2>
+                            <p class="text-muted small">Ingresa a tu cuenta para continuar</p>
+                        </div>
+
+                        <form [formGroup]="form_signin" (ngSubmit)="signin()" class="d-flex flex-column gap-3">
+                            
+                            <mat-form-field appearance="outline" class="custom-field">
+                                <mat-label>Nombre de usuario</mat-label>
+                                <input type="text" matInput formControlName="name" />
+                                <mat-icon matPrefix class="icon-orange">person</mat-icon>
+                                <mat-error>Usuario requerido</mat-error>
+                            </mat-form-field>
+
+                            <mat-form-field appearance="outline" class="custom-field">
+                                <mat-label>Contraseña</mat-label>
+                                <input matInput formControlName="password" type="password" />
+                                <mat-icon matPrefix class="icon-orange">lock</mat-icon>
+                                <mat-error>Contraseña requerida</mat-error>
+                            </mat-form-field>
+
+                            <button mat-flat-button color="primary" type="submit" class="btn-login shadow-sm mt-2">
+                                <span>Iniciar Sesión</span>
+                                <mat-icon iconPositionEnd>arrow_forward</mat-icon>
+                            </button>
+
+                            <div class="d-flex align-items-center my-3">
+                                <mat-divider class="flex-grow-1"></mat-divider>
+                                <span class="mx-3 text-muted small">o</span>
+                                <mat-divider class="flex-grow-1"></mat-divider>
+                            </div>
+
+                            <div class="text-center">
+                                <p class="text-muted small mb-3">¿Aún no tienes cuenta?</p>
+                                <button 
+                                    mat-stroked-button 
+                                    type="button"
+                                    [routerLink]="['/auth/sign-up']"
+                                    class="btn-signup w-100"
+                                >
+                                    Crear cuenta nueva
+                                </button>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
 </section>

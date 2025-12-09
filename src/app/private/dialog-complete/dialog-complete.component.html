@@ -1,10 +1,28 @@
-<h2 mat-dialog-title>Completar Orden</h2>
+<div class="dialog-container">
+    <div class="dialog-header">
+        <div class="icon-wrapper">
+            <mat-icon>task_alt</mat-icon>
+        </div>
+        <h2 mat-dialog-title>¿Completar esta orden?</h2>
+    </div>
 
-<mat-dialog-content>
-    ¿Está seguro de Completar esta orden?
-</mat-dialog-content>
+    <mat-dialog-content>
+        <p class="dialog-message">
+            La orden pasará a estado <strong>Completado</strong> y se registrará en las ventas del día.
+        </p>
+    </mat-dialog-content>
 
-<mat-dialog-actions align="end" class="flex gap-x-2">
-    <button [mat-dialog-close]="false" class="button-secundary">Cancelar</button>
-    <button [mat-dialog-close]="true" class="button-primary" cdkFocusInitial (click)="updateStatus()">Confirmar</button>
-</mat-dialog-actions>
+    <mat-dialog-actions align="end">
+        <button mat-button class="btn-cancel" (click)="cancel()">
+            Cancelar
+        </button>
+        
+        <button mat-flat-button class="btn-confirm" (click)="updateStatus()" [disabled]="isLoading">
+            @if (isLoading) {
+                <span>Procesando...</span>
+            } @else {
+                <span>Sí, completar orden</span>
+            }
+        </button>
+    </mat-dialog-actions>
+</div>
