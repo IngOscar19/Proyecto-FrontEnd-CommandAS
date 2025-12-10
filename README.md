@@ -1,29 +1,121 @@
-# ComandaHamburguesas
+# 🍔 Frontend - Sistema de Gestión de Restaurante
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.1.2.
+Single Page Application (SPA) moderna desarrollada en **Angular 17+**, diseñada para ofrecer una experiencia fluida e interactiva para clientes y personal del restaurante. Utiliza componentes **Standalone**, inyección de dependencias funcional y **WebSockets** para actualizaciones en tiempo real.
 
-## Development server
+## 🚀 Características Principales
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+* **Arquitectura Moderna:** Uso de **Standalone Components** (sin NgModules) y la nueva sintaxis de Control Flow (`@if`, `@for`).
+* **Roles de Usuario Dinámicos:**
+    * **Cliente:** Menú interactivo, carrito de compras y seguimiento de pedidos en tiempo real.
+    * **Admin/Staff:** Tableros de control para gestión de órdenes, menú y personal.
+* **Tiempo Real (WebSockets):** Conexión directa con el backend para recibir notificaciones instantáneas (ej. "Orden Lista" o "Nueva Comanda").
+* **UI/UX Responsiva:** Diseño adaptable utilizando **Angular Material** y **Bootstrap**.
+* **Gestión de Estado:** Manejo reactivo de datos con **RxJS** y Signals.
+* **Seguridad:** Interceptores HTTP para manejo de JWT y Guards para protección de rutas.
 
-## Code scaffolding
+## 🛠️ Tecnologías
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+* **Framework:** Angular 17+
+* **Lenguaje:** TypeScript
+* **Estilos & UI:**
+    * Angular Material (Componentes visuales)
+    * Bootstrap 5 (Sistema de grillas y utilidades)
+    * SCSS (Sass)
+* **Comunicación:**
+    * RxJS (Programación reactiva)
+    * Socket.io-client / Websockets nativos
+* **Notificaciones:** SweetAlert2
+* **Iconos:** Material Icons
 
-## Build
+## 📋 Requisitos Previos
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+Asegúrate de tener instalado:
+* **Node.js** (v18.13.0 o superior recomendado)
+* **NPM** (Gestor de paquetes)
+* **Angular CLI:** `npm install -g @angular/cli`
 
-## Running unit tests
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+### 2\. Acceder
 
-## Running end-to-end tests
+La aplicación estará disponible en: `http://localhost:4200` 
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+-----
 
-## Further help
+## ⚙️ Instalación Manual
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
-# proyecto-angular
-# project-front
+### 1\. Clonar el repositorio
+
+```bash
+git clone https://github.com/IngOscar19/Proyecto-FrontEnd-CommandAS.git
+```
+
+### 2\. Instalar dependencias
+
+```bash
+npm install
+```
+
+### 3\. Configurar entorno
+
+Verifica el archivo `src/environments/environment.ts` (o `provider.service.ts`) para asegurar que la URL del backend es correcta:
+
+```typescript
+export const environment = {
+    production: false,
+    socketUrl: 'http://192.168.2.68:3000/'
+}
+```
+
+### 4\. Ejecutar servidor de desarrollo
+
+```bash
+ng serve
+```
+
+*Abre tu navegador en `http://localhost:4200`.*
+
+-----
+
+## 📂 Estructura del Proyecto
+
+```text
+src/
+├── app/
+│   ├── components/      # Componentes reutilizables (Navbar, Cards, etc.)
+│   ├── interfaces/      # Modelos de datos TypeScript (User, Product, Order)
+│   ├── pages/           # Vistas principales (Login, Menú, Dashboard, ClientOrders)
+│   │   ├── admin/       # Vistas protegidas de administración
+│   │   └── client/      # Vistas públicas/privadas de cliente
+│   ├── services/        # Lógica de negocio y comunicación API
+│   │   ├── auth.service.ts
+│   │   ├── order.service.ts
+│   │   ├── web-sockets.service.ts
+│   │   └── ...
+│   ├── guards/          # Protección de rutas
+│   └── app.routes.ts    # Configuración de rutas (Router)
+├── assets/              # Imágenes (Hamburguesas, Snacks, Logos)
+└── styles.scss          # Estilos globales y temas de Material
+```
+
+##  Solución de Problemas Comunes
+
+**No conecta con el Backend:**
+
+  * Verifica que el Backend PHP esté corriendo en el puerto 8000.
+  * Revisa la consola del navegador (F12) por errores de CORS.
+
+**Error en WebSockets:**
+
+  * Asegúrate de que el script de sockets (`server.php`) en el backend esté activo.
+  * Verifica que la URL del socket en `web-sockets.service.ts` coincida con la del servidor.
+
+
+
+-----
+
+## ✒️ Autor
+
+Desarrollado por **Oscar Martin Espinosa Romero** - 2025.
+
+```
+```

@@ -62,14 +62,14 @@ export class ProviderService {
 
       observable.subscribe({
         next: (response: any) => {
-          console.log('✅ Respuesta completa del servidor:', response);
-          console.log('📦 Tipo de response.msg:', typeof response.msg);
-          console.log('📋 Contenido de response.msg:', response.msg);
+          console.log('Respuesta completa del servidor:', response);
+          console.log('Tipo de response.msg:', typeof response.msg);
+          console.log('Contenido de response.msg:', response.msg);
           
           if (!response.error) {
             resolve(response.msg);
           } else {
-            console.error('❌ Error en respuesta:', response.error_code, response.msg);
+            console.error('Error en respuesta:', response.error_code, response.msg);
             this._snackBar.open(
               this.excep[response.error_code] || response.msg || 'Error desconocido',
               '',
@@ -79,9 +79,9 @@ export class ProviderService {
           }
         },
         error: (error) => {
-          console.error('🔴 Error HTTP completo:', error);
-          console.error('🔴 Status:', error.status);
-          console.error('🔴 Message:', error.message);
+          console.error('Error HTTP completo:', error);
+          console.error('Status:', error.status);
+          console.error('Message:', error.message);
           this._snackBar.open('Error de conexión', '', { duration: 3000 });
           reject(error);
         },
